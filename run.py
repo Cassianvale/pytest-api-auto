@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time   : 2022/3/29 15:01
-# @Author : 余少琪
+
+
 import os
 import sys
 import traceback

@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-# @Time   : 2022/3/29 14:59
-# @Author : 余少琪
-描述: 发送企业微信通知
-"""
 
+
+"""
+发送企业微信通知
+"""
 import requests
 from utils.logging_tool.log_control import ERROR
 from utils.other_tools.allure_data.allure_report_data import TestMetrics, AllureFileClean

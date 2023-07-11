@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+
 """
-# @Time   : 2022/3/29 14:57
-# @Author : 余少琪
 描述: 发送邮件
 """
 

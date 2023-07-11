@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time   : 2022/3/28 15:21
-# @Author : 余少琪
+
+
 """
 日志装饰器，控制程序日志输入，默认为 True
 如设置 False，则程序不会打印日志

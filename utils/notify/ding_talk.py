@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time   : 2022/3/28 15:30
-# @Author : 余少琪
+
+
 """
 钉钉通知封装
 """

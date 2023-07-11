@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time   : 2021/11/26 18:27
-# @Author : 余少琪
+
+
 """
 mysql 封装，支持 增、删、改、查
 """
