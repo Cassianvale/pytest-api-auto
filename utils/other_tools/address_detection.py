@@ -1,11 +1,7 @@
-# coding=utf-8
-"""
-    @project: pytest-auto-api2
-    @Author：七月
-    @file： address_detection.py
-    @date：2022/11/9 11:42
-    @blogs: https://blog.csdn.net/weixin_43865008
-"""
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+
 from utils.mysql_tool.mysql_control import MysqlDB
 import copy
 

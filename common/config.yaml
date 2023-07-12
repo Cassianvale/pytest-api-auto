@@ -21,7 +21,7 @@ excel_report: False
 
 # 飞书通知
 lark:
-  webhook: https://open.feishu.cn/open-apis/bot/v2/hook/53f37e88-204e-4fc6-ad89-7f9e00c023a5
+  webhook: https://open.feishu.cn/open-apis/bot/v2/hook/2136c7b2-a6c3-461b-b69f-4168d7aaad74
 
 # 钉钉相关配置
 ding_talk:

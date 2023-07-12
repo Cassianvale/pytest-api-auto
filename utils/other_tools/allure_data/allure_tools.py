@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-# @Time   : 2022/4/7 17:53
-# @Author : 余少琪
-"""
+
+
 import json
 import allure
 from utils.other_tools.models import AllureAttachmentType

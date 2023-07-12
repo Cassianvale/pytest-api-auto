@@ -1,10 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-# @Time   : 2022/8/06 15:44
-# @Author : 余少琪
-描述:
-"""
 
 
 class MyBaseFailure(Exception):

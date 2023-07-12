@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 """
-# @Time   : 2022/3/28 15:44
-# @Author : 余少琪
-描述: 收集 allure 报告
+收集 allure 报告
 """
 
 import json

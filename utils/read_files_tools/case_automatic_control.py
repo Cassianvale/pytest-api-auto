@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-# @Time   : 2022/3/28 13:22
-# @Author : 余少琪
+用例自动化控制
 """
 import os
 from typing import Text, Dict

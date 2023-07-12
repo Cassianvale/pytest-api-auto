@@ -14,8 +14,9 @@ import urllib3
 from utils.other_tools.allure_data.allure_report_data import TestMetrics
 from utils import config
 
-
+# 关闭警告
 urllib3.disable_warnings()
+
 
 try:
     JSONDecodeError = json.decoder.JSONDecodeError
@@ -39,10 +40,10 @@ class FeiShuTalkChatBot:
 
     def send_text(self, msg: str):
         """
-    消息类型为text类型
-    :param msg: 消息内容
-    :return: 返回消息发送结果
-    """
+        消息类型为text类型
+        :param msg: 消息内容
+        :return: 返回消息发送结果
+        """
         data = {"msg_type": "text", "at": {}}
         if is_not_null_and_blank_str(msg):  # 传入msg非空
             data["content"] = {"text": msg}
@@ -55,11 +56,11 @@ class FeiShuTalkChatBot:
 
     def post(self):
         """
-    发送消息（内容UTF-8编码）
-    :return: 返回消息发送结果
-    """
+        发送消息（内容UTF-8编码）
+        :return: 返回消息发送结果
+        """
         rich_text = {
-            "email": "1603453211@qq.com",
+            "email": "1430066373@qq.com",
             "msg_type": "post",
             "content": {
                 "post": {
@@ -74,8 +75,8 @@ class FeiShuTalkChatBot:
                                 },
                                 {
                                     "tag": "at",
-                                    "user_id": "ou_18eac85d35a26f989317ad4f02e8bbbb"
-                                    # "text":"陈锐男"
+                                    "user_id": "on_ec7f64e0db6c0f7b8cba70f2315d4d33",
+                                    "text":"李翰卿"
                                 }
                             ],
                             [
@@ -139,7 +140,7 @@ class FeiShuTalkChatBot:
                                 },
                                 {
                                     "tag": "text",
-                                    "text": f"{datetime.datetime.now().strftime('%Y-%m-%d')}"
+                                    "text": f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
                                 }
                             ],
 

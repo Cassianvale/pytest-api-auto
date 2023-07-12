@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-# @Time   : 2022/3/28 10:52
-# @Author : 余少琪
-"""
 
+"""
+定时器
+"""
 
 import time
 import threading
