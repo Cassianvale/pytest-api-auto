@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time   : 2022/3/30 14:12
-# @Author : 余少琪
+
 import pytest
 import time
 import allure
@@ -22,31 +21,50 @@ def clear_report():
     del_file(ensure_path_sep("\\report"))
 
 
+# @pytest.fixture(scope="session", autouse=True)
+# def work_login_init():
+#     """
+#     获取登录的cookie
+#     :return:
+#     """
+#
+#     url = "http://127.0.0.1:8000/api/users/login"
+#     data = {
+#         "username": 'admin',
+#         "password": '123456'
+#     }
+#     headers = {'Content-Type': 'application/json'}
+#     # 请求登录接口
+#     res = requests.post(url=url, data=data, verify=True, headers=headers)
+#     response_cookie = res.cookies
+#     cookies = ''
+#     for k, v in response_cookie.items():
+#         _cookie = k + "=" + v + ";"
+#         # 拿到登录的cookie内容，cookie拿到的是字典类型，转换成对应的格式
+#         cookies += _cookie
+#         # 将登录接口中的cookie写入缓存中，其中login_cookie是缓存名称
+#     CacheHandler.update_cache(cache_name='login_cookie', value=cookies)
+
 @pytest.fixture(scope="session", autouse=True)
 def work_login_init():
     """
-    获取登录的cookie
+    获取登录的access_token
     :return:
     """
-
-    url = "https://www.wanandroid.com/user/login"
+    url = "http://127.0.0.1:8000/api/users/login"
     data = {
-        "username": 18800000001,
+        "username": "admin",
         "password": 123456
     }
-    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-    # 请求登录接口
-
-    res = requests.post(url=url, data=data, verify=True, headers=headers)
-    response_cookie = res.cookies
-
-    cookies = ''
-    for k, v in response_cookie.items():
-        _cookie = k + "=" + v + ";"
-        # 拿到登录的cookie内容，cookie拿到的是字典类型，转换成对应的格式
-        cookies += _cookie
-        # 将登录接口中的cookie写入缓存中，其中login_cookie是缓存名称
-    CacheHandler.update_cache(cache_name='login_cookie', value=cookies)
+    headers = {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:65.0) Gecko/20100101 Firefox/65.0'
+    }
+    res = requests.post(url=url, json=data, headers=headers).json()
+    access_token = res['data']['access_token']
+    token = f"Bearer {access_token};"
+    # 将登录接口中的access_token写入缓存中，其中login_token是缓存名称
+    CacheHandler.update_cache(cache_name='login_token', value=token)
 
 
 def pytest_collection_modifyitems(items):
@@ -102,24 +120,20 @@ def case_skip(in_data):
 
 
 def pytest_terminal_summary(terminalreporter):
-    """
-    收集测试结果
-    """
-
-    _PASSED = len([i for i in terminalreporter.stats.get('passed', []) if i.when != 'teardown'])
-    _ERROR = len([i for i in terminalreporter.stats.get('error', []) if i.when != 'teardown'])
-    _FAILED = len([i for i in terminalreporter.stats.get('failed', []) if i.when != 'teardown'])
-    _SKIPPED = len([i for i in terminalreporter.stats.get('skipped', []) if i.when != 'teardown'])
+    _PASSED = sum(1 for i in terminalreporter.stats.get('passed', []) if i.when != 'teardown')
+    _ERROR = sum(1 for i in terminalreporter.stats.get('error', []) if i.when != 'teardown')
+    _FAILED = sum(1 for i in terminalreporter.stats.get('failed', []) if i.when != 'teardown')
+    _SKIPPED = sum(1 for i in terminalreporter.stats.get('skipped', []) if i.when != 'teardown')
     _TOTAL = terminalreporter._numcollected
     _TIMES = time.time() - terminalreporter._sessionstarttime
-    INFO.logger.error(f"用例总数: {_TOTAL}")
+    INFO.logger.info(f"用例总数: {_TOTAL}")
     INFO.logger.error(f"异常用例数: {_ERROR}")
     ERROR.logger.error(f"失败用例数: {_FAILED}")
     WARNING.logger.warning(f"跳过用例数: {_SKIPPED}")
-    INFO.logger.info("用例执行时长: %.2f" % _TIMES + " s")
+    INFO.logger.info(f"用例执行时长: {_TIMES:.2f} s")
 
     try:
         _RATE = _PASSED / _TOTAL * 100
-        INFO.logger.info("用例成功率: %.2f" % _RATE + " %")
+        INFO.logger.info(f"用例成功率: {_RATE:.2f} %")
     except ZeroDivisionError:
         INFO.logger.info("用例成功率: 0.00 %")

@@ -1,0 +1,48 @@
+## 公共参数
+#case_common:
+#  allureEpic: 测试平台接口 # @allure.epic()装饰器
+#  allureFeature: 登录模块 # @allure.feature()装饰器
+#  allureStory: 登录     # @allure.story()装饰器
+#
+#case_id: # 如/api/users/login，case_id就为login_01
+#  host: ${{host()}} # config.yaml中的host
+#  url: /api/user/login # 接口地址
+#  method: POST # 请求方式
+#  detail: 正常登录 # 用例描述。选填
+#
+#  headers:  # 请求头
+#    Content-Type: multipart/form-data;
+#    # 这里cookie的值，写的是存入缓存的名称
+#    cookie: login_cookie
+#
+#  # 请求的数据，是 params 还是 json、或者file、data
+#  requestType: data
+#
+#  # 是否执行，空或者 true 都会执行
+#  is_run:
+#
+#  data:
+#    username: 'admin'
+#    password: '123456'
+#
+#  # 是否有依赖业务，为空或者false则表示没有(Bool/None)
+#  dependence_case: False
+#  # 依赖的数据
+#  dependence_case_data:
+#    - case_id: self
+#      dependent_data:
+#        - dependent_type: sqlData  # 依赖数据类型
+#          jsonpath: $.business_type
+#          set_cache: yushaoqi
+#  assert:
+#    # 断言接口状态码
+#    errorCode: # 断言名称
+#      jsonpath: $.errorCode # 提取响应或sql中内容
+#      type: ==  # ==、!=、IN、NOT IN
+#      value: 0  # 期望值(string/int)
+#      AssertType: # 为空表示响应断言，为SQL则表示数据库断言(string/None)
+#    status_code: 200
+#  sql:  # (List)
+#    setup_sql:
+#      - SELECT * FROM `api_test`.`t_open_field_cfg_copy1` LIMIT 0,1;
+#  sleep: 2

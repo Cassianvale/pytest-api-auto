@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-# @Time   : 2022/3/28 15:26
-# @Author : 余少琪
+Excel控制器
 """
 
 import json
-
 import xlrd
 from xlutils.copy import copy
 from common.setting import ensure_path_sep
@@ -14,10 +12,10 @@ from common.setting import ensure_path_sep
 
 def get_excel_data(sheet_name: str, case_name: any) -> list:
     """
-    读取 Excel 中的数据
-    :param sheet_name: excel 中的 sheet 页的名称
-    :param case_name: 测试用例名称
-    :return:
+    Read data from Excel
+    :param sheet_name: Name of the sheet in the Excel file
+    :param case_name: Name of the test case
+    :return: List of tuples with request body data and response data
     """
     res_list = []
 
@@ -26,7 +24,7 @@ def get_excel_data(sheet_name: str, case_name: any) -> list:
 
     # 打开对应的子表
     work_sheet = work_book.sheet_by_name(sheet_name)
-    # 读取一行
+    #读取一行
     idx = 0
     for one in work_sheet.col_values(0):
         # 运行需要运行的测试用例
@@ -36,7 +34,6 @@ def get_excel_data(sheet_name: str, case_name: any) -> list:
             res_list.append((req_body_data, json.loads(resp_data)))
         idx += 1
     return res_list
-
 
 def set_excel_data(sheet_index: int) -> tuple:
     """

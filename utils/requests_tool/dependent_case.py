@@ -131,7 +131,7 @@ class DependentCase:
                             jsonpath_data=jsonpath_data,
                         )
             else:
-                WARNING.logger.warning("检查到数据库开关为关闭状态，请确认配置")
+                WARNING.logger.warning("检查到数据库开关为 [关闭] 状态，请确认配置")
 
     def dependent_handler(
             self,

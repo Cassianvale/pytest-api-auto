@@ -1,0 +1,28 @@
+# 公共参数
+case_common:
+  allureEpic: 测试平台接口
+  allureFeature: 用户模块
+  allureStory: 用户
+
+user_01:
+    host: ${{host()}}
+    url: /api/users
+    method: GET
+    detail: 获取用户列表
+    headers:
+      User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:65.0) Gecko/20100101 Firefox/65.0
+      Authorization: $cache{login_token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: params
+    is_run:
+    data:
+      keyword: admin
+    dependence_case:
+    dependence_case_data:
+    assert:
+      username:
+        jsonpath: $.items[0].username
+        type: ==
+        value: admin
+        AssertType:
+    sql:

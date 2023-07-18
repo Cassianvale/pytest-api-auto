@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time   : 2023-03-20 13:55:04
+# @Time   : 2023-07-18 17:55:06
 
 
 import allure
@@ -12,18 +12,18 @@ from utils.read_files_tools.regular_control import regular
 from utils.requests_tool.teardown_control import TearDownHandler
 
 
-case_id = ['collect_tool_list_01']
+case_id = ['user_01']
 TestData = GetTestCase.case_data(case_id)
 re_data = regular(str(TestData))
 
 
-@allure.epic("开发平台接口")
-@allure.feature("收藏模块")
-class TestCollectToolList:
+@allure.epic("测试平台接口")
+@allure.feature("用户模块")
+class TestGetUserList:
 
-    @allure.story("收藏网址列表接口")
+    @allure.story("用户")
     @pytest.mark.parametrize('in_data', eval(re_data), ids=[i['detail'] for i in TestData])
-    def test_collect_tool_list(self, in_data, case_skip):
+    def test_get_user_list(self, in_data, case_skip):
         """
         :param :
         :return:
@@ -38,4 +38,4 @@ class TestCollectToolList:
 
 
 if __name__ == '__main__':
-    pytest.main(['test_test_collect_tool_list.py', '-s', '-W', 'ignore:Module already imported:pytest.PytestWarning'])
+    pytest.main(['test_test_get_user_list.py', '-s', '-W', 'ignore:Module already imported:pytest.PytestWarning'])

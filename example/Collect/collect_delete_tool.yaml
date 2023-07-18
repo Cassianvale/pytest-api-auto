@@ -16,7 +16,7 @@ collect_delete_tool_01:
     # 请求的数据，是 params 还是 json、或者file、data
     requestType: data
     # 是否执行，空或者 true 都会执行
-    is_run:
+    is_run: False
     data:
       id: $cache{collect_delete_tool_01_id}
       id2: 2

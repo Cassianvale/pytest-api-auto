@@ -1,17 +1,18 @@
-project_name: xxx项目名称
+project_name: 测试平台
 
 env: 测试环境
 # 测试人员名称，作用于自动生成代码的作者，以及发送企业微信、钉钉通知的测试负责人
-tester_name: 七月
+tester_name: 慕长秋
 
 # 域名1
-host: https://www.wanandroid.com
+# host: https://www.wanandroid.com
+host: http://127.0.0.1:8000
 # 域名2，支持多个域名配置
 app_host:
 
 # 实时更新用例内容，False时，已生成的代码不会在做变更
 # 设置为True的时候，修改yaml文件的用例，代码中的内容会实时更新
-real_time_update_test_cases: False
+real_time_update_test_cases: True
 
 # 0:不发送通知 1:飞书 2:钉钉通知 3:企业微信通知 4:邮箱通知
 # 支持同时发送多个通知，如多个，则用逗号分割， 如 1, 2
@@ -53,7 +54,7 @@ email:
   # 自己到QQ邮箱中配置stamp_key
   stamp_key: llqyhisgrakzichg
   # 收件人改成自己的邮箱
-  send_list: 1430066373@qq.com
+  send_list: '1430066373@qq.com'
 
 
 

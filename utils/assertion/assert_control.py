@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time   : 2022/3/28 14:18
-# @Author : 余少琪
+
 """
 断言类型封装，支持json响应断言、数据库断言
 """
@@ -36,7 +35,7 @@ class AssertUtil:
     @property
     def get_assert_data(self):
         assert self.assert_data is not None, (
-                "'%s' should either include a `assert_data` attribute, "
+                "断言数据: '%s' 中缺少 `assert_data` 属性 "
                 % self.__class__.__name__
         )
         return ast.literal_eval(cache_regular(str(self.assert_data)))

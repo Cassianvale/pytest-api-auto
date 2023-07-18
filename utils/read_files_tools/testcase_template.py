@@ -1,9 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 """
-# @Time    : 2022/4/25 20:02
-# @Author  : 余少琪
-# @Email   : 1603453211@qq.com
 # @File    : testcase_template
 # @describe: 用例模板
 """
@@ -37,7 +34,9 @@ def write_testcase_file(*, allure_epic, allure_feature, class_title,
         """
     conf_data = GetYamlData(ensure_path_sep("\\common\\config.yaml")).get_yaml_data()
     now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    real_time_update_test_cases = conf_data['real_time_update_test_cases']
+    # real_time_update_test_cases = conf_data['real_time_update_test_cases']
+    real_time_update_test_cases = conf_data.get('real_time_update_test_cases', False)
+
 
     page = f'''#!/usr/bin/env python
 # -*- coding: utf-8 -*-
@@ -81,6 +80,7 @@ class Test{class_title}:
 if __name__ == '__main__':
     pytest.main(['{file_name}', '-s', '-W', 'ignore:Module already imported:pytest.PytestWarning'])
 '''
+
     if real_time_update_test_cases:
         write_case(case_path=case_path, page=page)
     elif real_time_update_test_cases is False:

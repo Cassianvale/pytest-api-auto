@@ -71,12 +71,12 @@ class FeiShuTalkChatBot:
                                 {
                                     "tag": "a",
                                     "text": "测试报告",
-                                    "href": "https://192.168.xx.72:8080"
+                                    "href": "https://192.168.1.58:8080"
                                 },
                                 {
                                     "tag": "at",
                                     "user_id": "on_ec7f64e0db6c0f7b8cba70f2315d4d33",
-                                    "text":"李翰卿"
+                                    "text": "慕长秋"
                                 }
                             ],
                             [
@@ -106,7 +106,7 @@ class FeiShuTalkChatBot:
                                 {
                                     "tag": "text",
                                     "text": f"{self.metrics.pass_rate} %"
-                                }],  # 成功率
+                                }],
 
                             [{
                                 "tag": "text",
@@ -143,15 +143,14 @@ class FeiShuTalkChatBot:
                                     "text": f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
                                 }
                             ],
-
-                            [
-                                {
-                                    "tag": "img",
-                                    "image_key": "d640eeea-4d2f-4cb3-88d8-c964fab53987",
-                                    "width": 300,
-                                    "height": 300
-                                }
-                            ]
+                            # [
+                            #     {
+                            #         "tag": "img",
+                            #         "image_key": "d640eeea-4d2f-4cb3-88d8-c964fab53987",
+                            #         "width": 300,
+                            #         "height": 300
+                            #     }
+                            # ]
                         ]
                     }
                 }

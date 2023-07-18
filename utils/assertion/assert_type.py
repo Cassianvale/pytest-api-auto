@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time   : 2022/4/22 14:49
-# @Author : 余少琪
 
 """
 Assert 断言类型

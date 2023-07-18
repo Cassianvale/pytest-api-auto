@@ -28,6 +28,13 @@ class TestCaseAutomaticGeneration:
         """ 存放用例代码路径"""
         return ensure_path_sep("\\test_case")
 
+    def validate_required_fields(self):
+        required_fields = ["allureEpic", "allureFeature", "allureStory"]
+        for field in required_fields:
+            assert self.yaml_case_data.get("case_common", {}).get(field) is not None, (
+                f"用例中 {field} 为必填项，请检查用例内容, 用例路径：'{self.file_path}'"
+            )
+
     @property
     def allure_epic(self):
         _allure_epic = self.yaml_case_data.get("case_common").get("allureEpic")

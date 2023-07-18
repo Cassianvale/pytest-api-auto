@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time   : 2023-03-20 13:55:04
+# @Time   : 2023-07-18 17:55:06
 
 
 import allure
@@ -12,12 +12,12 @@ from utils.read_files_tools.regular_control import regular
 from utils.requests_tool.teardown_control import TearDownHandler
 
 
-case_id = ['login_01', 'login_02', 'login_03', 'login_04', 'login_05', 'login_06', 'login_07', 'login_08']
+case_id = ['login_01', 'login_02', 'login_03']
 TestData = GetTestCase.case_data(case_id)
 re_data = regular(str(TestData))
 
 
-@allure.epic("开发平台接口")
+@allure.epic("测试平台接口")
 @allure.feature("登录模块")
 class TestLogin:
 

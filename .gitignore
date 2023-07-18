@@ -52,3 +52,7 @@ Thumbs.db
 /mvnw.cmd
 /mvnw
 .coverage
+.venv
+venv
+*.pytest_cache
+*__pycache__
