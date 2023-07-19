@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 """
-# @File    : testcase_template
-# @describe: 用例模板
+describe: 用例模板
 """
 
 import datetime

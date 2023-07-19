@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-# @Time   : 2022/3/28 15:46
-# @Author : 余少琪
-"""
+
 from urllib.parse import parse_qs, urlparse
 from typing import Any, Union, Text, List, Dict, Tuple
 import ast

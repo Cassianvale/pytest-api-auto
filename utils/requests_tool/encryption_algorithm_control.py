@@ -1,12 +1,5 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-"""
-# @Time    : 2022/5/23 21:27
-# @Author  : 余少琪
-# @Email   : 1603453211@qq.com
-# @File    : encryption_algorithm_control
-# @describe:
-"""
 
 import hashlib
 from hashlib import sha256

@@ -1,8 +1,7 @@
 """
 Desc : 自定义函数调用
-# @Time : 2022/4/2 9:32 上午
-# @Author : 余少琪
 """
+
 import re
 import datetime
 import random
@@ -10,7 +9,6 @@ from datetime import date, timedelta, datetime
 from jsonpath import jsonpath
 from faker import Faker
 from utils.logging_tool.log_control import ERROR
-
 
 class Context:
     """ 正则替换 """

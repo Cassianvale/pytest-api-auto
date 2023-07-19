@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-# @Time   : 2022/8/11 10:51
-# @Author : 余少琪
-"""
+
 import json
 from jsonpath import jsonpath
 from common.setting import ensure_path_sep

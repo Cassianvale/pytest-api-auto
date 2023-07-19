@@ -1,12 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-"""
-# @Time    : 2022/6/2 11:30
-# @Author  : 余少琪
-# @Email   : 1603453211@qq.com
-# @File    : set_current_request_cache
-# @describe:
-"""
+
 import json
 from typing import Text
 from jsonpath import jsonpath

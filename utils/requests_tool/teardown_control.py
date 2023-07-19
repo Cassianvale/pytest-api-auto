@@ -1,11 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 """
-# @Time    : 2022/5/23 14:22
-# @Author  : 余少琪
-# @Email   : 1603453211@qq.com
-# @File    : teardownControl
-# @describe: 请求后置处理
+请求后置处理
 """
 import ast
 import json

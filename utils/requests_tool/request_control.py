@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-# @Time   : 2022/3/28 12:52
-# @Author : 余少琪
-"""
+
 import ast
 import os
 import random
