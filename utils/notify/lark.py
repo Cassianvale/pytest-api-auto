@@ -12,6 +12,7 @@ import datetime
 import requests
 import urllib3
 from utils.other_tools.allure_data.allure_report_data import TestMetrics
+
 from utils import config
 
 # 关闭警告
@@ -54,11 +55,21 @@ class FeiShuTalkChatBot:
         logging.debug('text类型：%s', data)
         return self.post()
 
+
+
     def post(self):
         """
         发送消息（内容UTF-8编码）
         :return: 返回消息发送结果
         """
+        at_users = []
+        for user_id in config.lark.user_id:
+            at_user = {
+                "tag": "at",
+                "user_id": user_id
+            }
+            at_users.append(at_user)
+
         rich_text = {
             "email": "1430066373@qq.com",
             "msg_type": "post",
@@ -73,11 +84,7 @@ class FeiShuTalkChatBot:
                                     "text": "测试报告",
                                     "href": "https://192.168.1.58:8080"
                                 },
-                                {
-                                    "tag": "at",
-                                    "user_id": "on_ec7f64e0db6c0f7b8cba70f2315d4d33",
-                                    "text": "慕长秋"
-                                }
+                                *at_users    #  可以@多个用户
                             ],
                             [
                                 {
@@ -142,15 +149,7 @@ class FeiShuTalkChatBot:
                                     "tag": "text",
                                     "text": f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
                                 }
-                            ],
-                            # [
-                            #     {
-                            #         "tag": "img",
-                            #         "image_key": "d640eeea-4d2f-4cb3-88d8-c964fab53987",
-                            #         "width": 300,
-                            #         "height": 300
-                            #     }
-                            # ]
+                            ]
                         ]
                     }
                 }

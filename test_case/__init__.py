@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time   : 2022/3/28 15:28
-# @Author : 余少琪
+
 from common.setting import ensure_path_sep
 from utils.read_files_tools.get_yaml_data_analysis import CaseData
 from utils.read_files_tools.get_all_files_path import get_all_files

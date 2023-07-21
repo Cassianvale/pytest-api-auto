@@ -6,6 +6,7 @@ import os
 import sys
 import traceback
 import pytest
+from utils.read_files_tools.case_automatic_control import TestCaseAutomaticGeneration
 from utils.other_tools.models import NotificationType
 from utils.other_tools.allure_data.allure_report_data import AllureFileClean
 from utils.logging_tool.log_control import INFO
@@ -33,7 +34,7 @@ def run():
         )
 
         # 判断现有的测试用例，如果未生成测试代码，则自动生成
-        # TestCaseAutomaticGeneration().get_case_automatic()
+        TestCaseAutomaticGeneration().get_case_automatic()
 
         pytest.main(['-s', '-W', 'ignore:Module already imported:pytest.PytestWarning',
                      '--alluredir', './report/tmp', "--clean-alluredir"])
@@ -48,7 +49,7 @@ def run():
                    -x: 一旦错误，则停止运行
                    --maxfail: 设置最大失败次数，当超出这个阈值时，则不会在执行测试用例
                     "--reruns=3", "--reruns-delay=2"
-                   """
+        """
 
         os.system(r"allure generate ./report/tmp -o ./report/html --clean")
 

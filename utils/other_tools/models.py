@@ -188,9 +188,12 @@ class MySqlDB(BaseModel):
     port: Union[int, None] = 3306
 
 
+class Lark(BaseModel):
+    webhook: Union[Text, None]
+    user_id: List[Text]
+
 class Webhook(BaseModel):
     webhook: Union[Text, None]
-
 
 class Email(BaseModel):
     send_user: Union[Text, None]
@@ -211,7 +214,7 @@ class Config(BaseModel):
     mirror_source: Text
     wechat: "Webhook"
     email: "Email"
-    lark: "Webhook"
+    lark: "Lark"
     real_time_update_test_cases: bool = False
     host: Text
     app_host: Union[Text, None]

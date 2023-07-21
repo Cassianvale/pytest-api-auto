@@ -4,6 +4,7 @@ env: 测试环境
 # 测试人员名称，作用于自动生成代码的作者，以及发送企业微信、钉钉通知的测试负责人
 tester_name: 慕长秋
 
+
 # 域名1
 # host: https://www.wanandroid.com
 host: http://127.0.0.1:8000
@@ -20,16 +21,20 @@ notification_type: 1
 # 收集失败的用例开关，整理成excel报告的形式，自动发送，目前只支持返送企业微信通知
 excel_report: False
 
-# 飞书通知
+# 飞书通知，user_id通知列表可配置多个人员，
+# 进入 https://open.feishu.cn/document/server-docs/contact-v3/user/get 调用API获取user_id列表
 lark:
   webhook: https://open.feishu.cn/open-apis/bot/v2/hook/2136c7b2-a6c3-461b-b69f-4168d7aaad74
+  user_id: 
+    - ou_ef03d49e0b7fdbede63bcfa66286ba03
+    - ou_ef03d49e0b7fdbede63bcfa66286ba03
 
 # 钉钉相关配置
 ding_talk:
   webhook: https://oapi.dingtalk.com/robot/send?access_token=a59902a7e811f93ffe301d8326b07a2acc8aa2a864e7d61ee9fc076481ced2a6
   secret: SECdea6489dfcc3b9259da943c5ae38d3530696f2fa83ac72a9ee716e9511675b9b
-#  webhook:
-#  secret:
+
+
 # 数据库相关配置
 mysql_db:
   # 数据库开关
