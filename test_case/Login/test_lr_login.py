@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time   : 2023-07-24 16:01:48
+# @Time   : 2023-07-24 16:52:15
 
 
 import allure
@@ -12,18 +12,18 @@ from utils.read_files_tools.regular_control import regular
 from utils.requests_tool.teardown_control import TearDownHandler
 
 
-case_id = ['LT_login_01', 'LT_login_02', 'LT_login_03']
+case_id = ['login_01', 'LT_login_02', 'LT_login_03']
 TestData = GetTestCase.case_data(case_id)
 re_data = regular(str(TestData))
 
 
 @allure.epic("测试平台接口")
 @allure.feature("登录模块")
-class TestLogin:
+class TestLrLogin:
 
     @allure.story("登录")
     @pytest.mark.parametrize('in_data', eval(re_data), ids=[i['detail'] for i in TestData])
-    def test_login(self, in_data, case_skip):
+    def test_lr_login(self, in_data, case_skip):
         """
         :param :
         :return:
@@ -38,4 +38,4 @@ class TestLogin:
 
 
 if __name__ == '__main__':
-    pytest.main(['test_test_login.py', '-s', '-W', 'ignore:Module already imported:pytest.PytestWarning'])
+    pytest.main(['test_test_lr_login.py', '-s', '-W', 'ignore:Module already imported:pytest.PytestWarning'])
