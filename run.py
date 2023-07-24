@@ -15,10 +15,12 @@ from utils.notify.ding_talk import DingTalkSendMsg
 from utils.notify.send_mail import SendEmail
 from utils.notify.lark import FeiShuTalkChatBot
 from utils.other_tools.allure_data.error_case_excel import ErrorCaseExcel
+
 from utils import config
 
 
 def run():
+
     # 从配置文件中获取项目名称
     try:
         INFO.logger.info(

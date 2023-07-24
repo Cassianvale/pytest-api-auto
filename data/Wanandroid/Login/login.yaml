@@ -4,7 +4,7 @@ case_common:
   allureFeature: 登录模块
   allureStory: 登录
 
-login_01:
+wa_login_01:
     host: ${{app_host()}}
     url: /user/login
     method: POST

@@ -4,7 +4,7 @@ case_common:
   allureFeature: 登录模块
   allureStory: 登录
 
-login_01:
+LR_login_01:
     host: ${{host()}}
     url: /api/users/login
     method: POST
@@ -18,9 +18,9 @@ login_01:
     data:
       username: 'admin'
       password: '123456'
-      # 是否有依赖业务，为空或者false则表示没有
+    # 是否有依赖业务，为空或者false则表示没有
     dependence_case: False
-        # 依赖的数据
+    # 依赖的数据
     dependence_case_data:
     assert:
       msg:
@@ -34,7 +34,7 @@ login_01:
     sql:
     
 
-LT_login_02:
+LR_login_02:
     host: ${{host()}}
     url: /api/users/login
     method: POST
@@ -73,7 +73,7 @@ LT_login_02:
       status_code: 404
     sql:
 
-LT_login_03:
+LR_login_03:
     host: ${{host()}}
     url: /api/users/login
     method: POST
