@@ -5,11 +5,9 @@ env: 测试环境
 tester_name: 慕长秋
 
 
-# 域名1
-# host: https://www.wanandroid.com
+# 域名，支持多个域名配置
 host: http://127.0.0.1:8000
-# 域名2，支持多个域名配置
-app_host:
+app_host: https://www.wanandroid.com
 
 # 实时更新用例内容，False时，已生成的代码不会在做变更
 # 设置为True的时候，修改yaml文件的用例，代码中的内容会实时更新
@@ -18,6 +16,7 @@ real_time_update_test_cases: True
 # 0:不发送通知 1:飞书 2:钉钉通知 3:企业微信通知 4:邮箱通知
 # 支持同时发送多个通知，如多个，则用逗号分割， 如 1, 2
 notification_type: 1
+
 # 收集失败的用例开关，整理成excel报告的形式，自动发送，目前只支持返送企业微信通知
 excel_report: False
 
@@ -33,7 +32,6 @@ lark:
 ding_talk:
   webhook: https://oapi.dingtalk.com/robot/send?access_token=a59902a7e811f93ffe301d8326b07a2acc8aa2a864e7d61ee9fc076481ced2a6
   secret: SECdea6489dfcc3b9259da943c5ae38d3530696f2fa83ac72a9ee716e9511675b9b
-
 
 # 数据库相关配置
 mysql_db:

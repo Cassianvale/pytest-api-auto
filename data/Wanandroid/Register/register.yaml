@@ -1,26 +1,27 @@
 # 公共参数
 case_common:
   allureEpic: 开发平台接口
-  allureFeature: 个人信息模块
-  allureStory: 个人信息接口
+  allureFeature: 注册模块
+  allureStory: 注册
 
-get_user_info_01:
-    host: ${{host()}}
-    url: /user/lg/userinfo/json
-    method: GET
-    detail: 正常获取个人身份信息
+wa_register_01:
+    host: ${{app_host()}}
+    url: /user/register
+    method: POST
+    detail: 注册验证
     headers:
-      Content-Type: multipart/form-data;
-      # 这里cookie的值，写的是存入缓存的名称
-      cookie: $cache{login_cookie}
+#      Content-Type: multipart/form-data;
     # 请求的数据，是 params 还是 json、或者file、data
     requestType: data
     # 是否执行，空或者 true 都会执行
-    is_run: False
+    is_run:
     data:
+      username: '18100005201'
+      password: '123456'
+      repassword: '123456'
       # 是否有依赖业务，为空或者false则表示没有
     dependence_case: False
-        # 依赖的数据
+
     dependence_case_data:
     assert:
       # 断言接口状态码
@@ -31,8 +32,8 @@ get_user_info_01:
         AssertType:
       # 断言接口返回的username
       username:
-        jsonpath: $.data.userInfo.username
+        jsonpath: $.data.username
         type: ==
-        value: '18800000001'
+        value: '18100005201'
         AssertType:
     sql:

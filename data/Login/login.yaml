@@ -4,7 +4,7 @@ case_common:
   allureFeature: 登录模块
   allureStory: 登录
 
-login_01:
+LT_login_01:
     host: ${{host()}}
     url: /api/users/login
     method: POST
@@ -34,13 +34,13 @@ login_01:
     sql:
     
 
-login_02:
+LT_login_02:
     host: ${{host()}}
     url: /api/users/login
     method: POST
     detail: 输入错误的密码
     headers:
-#      Content-Type: multipart/form-data;
+    # Content-Type: multipart/form-data;
     # 请求的数据，是 params 还是 json、或者file、data
     requestType: json
     # 是否执行，空或者 true 都会执行
@@ -73,7 +73,7 @@ login_02:
       status_code: 404
     sql:
 
-login_03:
+LT_login_03:
     host: ${{host()}}
     url: /api/users/login
     method: POST

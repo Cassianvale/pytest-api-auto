@@ -13,11 +13,13 @@ from utils.read_files_tools.get_all_files_path import get_all_files
 from utils.other_tools.exceptions import ValueNotFoundError
 from utils.logging_tool.log_control import INFO
 
+
 class TestCaseAutomaticGeneration:
 
     def __init__(self):
         self.yaml_case_data = None
         self.file_path = None
+
 
     @property
     def case_date_path(self) -> Text:

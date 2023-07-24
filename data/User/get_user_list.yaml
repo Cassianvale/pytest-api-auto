@@ -4,7 +4,7 @@ case_common:
   allureFeature: 用户模块
   allureStory: 用户
 
-user_01:
+lr_user_01:
     host: ${{host()}}
     url: /api/users
     method: GET
