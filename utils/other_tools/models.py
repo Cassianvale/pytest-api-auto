@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+
 import types
 from enum import Enum, unique
 from typing import Text, Dict, Callable, Union, Optional, List, Any

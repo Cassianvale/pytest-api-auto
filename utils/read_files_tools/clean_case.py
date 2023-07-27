@@ -1,13 +1,17 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+
 import os, shutil
 from common.setting import ensure_path_sep
 
 
 '''
-删除test_case目录下所有已经生成的用例
+清空test_case目录下所有已经生成的用例
 '''
 
 def del_directories(path):
-    """删除目录下的所有文件夹，排除__init__.py和conftest.py文件"""
+    """清空目录下的所有文件夹，排除__init__.py和conftest.py文件"""
     if not os.path.isdir(path):
         return
 

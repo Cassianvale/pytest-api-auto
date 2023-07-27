@@ -9,6 +9,7 @@ import os
 from utils.read_files_tools.yaml_control import GetYamlData
 from common.setting import ensure_path_sep
 from utils.other_tools.exceptions import ValueNotFoundError
+from utils.read_files_tools.regular_control import cache_regular
 
 
 def write_case(case_path, page):

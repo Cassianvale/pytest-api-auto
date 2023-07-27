@@ -21,4 +21,3 @@ def ensure_path_sep(path: Text) -> Text:
         path = os.sep.join(path.split("\\"))
 
     return root_path() + path
-

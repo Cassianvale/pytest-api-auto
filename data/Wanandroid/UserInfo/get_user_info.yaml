@@ -5,7 +5,7 @@ case_common:
   allureStory: 个人信息接口
 
 wa_get_user_info_01:
-    host: ${{host()}}
+    host: ${{app_host()}}
     url: /user/lg/userinfo/json
     method: GET
     detail: 正常获取个人身份信息

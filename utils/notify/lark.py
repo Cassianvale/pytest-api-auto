@@ -81,15 +81,17 @@ class FeiShuTalkChatBot:
                             [
                                 {
                                     "tag": "a",
-                                    "text": "测试报告",
-                                    "href": "https://192.168.1.58:8080"
-                                },
-                                *at_users    #  可以@多个用户
+                                    "text": "👉点击查看测试报告",
+                                    "href": "http://activate.navicat.com:9999"
+                                }
+                            ],
+                            [
+                                    *at_users    #  可以@多个用户
                             ],
                             [
                                 {
                                     "tag": "text",
-                                    "text": "测试  人员 : "
+                                    "text": "测 试 人 员 : "
                                 },
                                 {
                                     "tag": "text",
@@ -99,57 +101,73 @@ class FeiShuTalkChatBot:
                             [
                                 {
                                     "tag": "text",
-                                    "text": "运行  环境 : "
+                                    "text": "运 行 环 境 : "
                                 },
                                 {
                                     "tag": "text",
                                     "text": f"{config.env}"
                                 }
                             ],
-                            [{
-                                "tag": "text",
-                                "text": "成   功   率 : "
-                            },
-                                {
-                                    "tag": "text",
-                                    "text": f"{self.metrics.pass_rate} %"
-                                }],
-
-                            [{
-                                "tag": "text",
-                                "text": "成功用例数 : "
-                            },
-                                {
-                                    "tag": "text",
-                                    "text": f"{self.metrics.passed}"
-                                }],  # 成功用例数
-
-                            [{
-                                "tag": "text",
-                                "text": "失败用例数 : "
-                            },
-                                {
-                                    "tag": "text",
-                                    "text": f"{self.metrics.failed}"
-                                }],  # 失败用例数
-                            [{
-                                "tag": "text",
-                                "text": "异常用例数 : "
-                            },
-                                {
-                                    "tag": "text",
-                                    "text": f"{self.metrics.failed}"
-                                }],  # 损坏用例数
                             [
                                 {
-                                    "tag": "text",
-                                    "text": "时  间 : "
+                                "tag": "text",
+                                "text": "成   功   率 : "
                                 },
                                 {
                                     "tag": "text",
-                                    "text": f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+                                    "text": f"{self.metrics.pass_rate}%"
                                 }
-                            ]
+                            ],
+                            [
+                                {
+                                "tag": "text",
+                                "text": "成功用例数 : "
+                                },
+                                {
+                                    "tag": "text",
+                                    "text": f"{self.metrics.passed}"
+                                }
+                            ],  
+                            [
+                                {
+                                "tag": "text",
+                                "text": "失败用例数 : "
+                                },
+                                {
+                                    "tag": "text",
+                                    "text": f"{self.metrics.failed}"
+                                }
+                            ],  
+                            [
+                                {
+                                "tag": "text",
+                                "text": "异常用例数 : "
+                                },
+                                {
+                                    "tag": "text",
+                                    "text": f"{self.metrics.failed}"
+                                }
+                            ],  
+                            [
+                                {
+                                    "tag": "text",
+                                    "text": "日   期 : "
+                                },
+                                {
+                                    "tag": "text",
+                                    "text": f"{datetime.datetime.now().strftime('%Y-%m-%d')}"
+                                }
+                            ],
+                            [
+                                {
+                                    "tag": "text",
+                                    "text": "时   间 : "
+                                },
+                                {
+                                    "tag": "text",
+                                    "text": f"{datetime.datetime.now().strftime('%H:%M:%S')}"
+                                }
+                            ],
                         ]
                     }
                 }

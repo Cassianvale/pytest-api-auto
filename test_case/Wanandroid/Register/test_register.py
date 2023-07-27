@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time   : 2023-07-24 17:39:56
+# @Time   : 2023-07-27 18:01:11
 
 
 import allure
@@ -12,7 +12,7 @@ from utils.read_files_tools.regular_control import regular
 from utils.requests_tool.teardown_control import TearDownHandler
 
 
-case_id = ['wa_register_01']
+case_id = ['wa_register_01', 'wa_register_02']
 TestData = GetTestCase.case_data(case_id)
 re_data = regular(str(TestData))
 

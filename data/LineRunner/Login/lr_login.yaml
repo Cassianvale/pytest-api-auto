@@ -14,7 +14,7 @@ LR_login_01:
     # 请求的数据，是 params 还是 json、或者file、data
     requestType: json
     # 是否执行，空或者 true 都会执行
-    is_run: false
+    is_run:
     data:
       username: 'admin'
       password: '123456'

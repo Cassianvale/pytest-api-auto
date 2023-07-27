@@ -59,7 +59,7 @@ collect_addtool_02:
     # 请求的数据，是 params 还是 json、或者file、data
     requestType: data
     # 是否执行，空或者 true 都会执行
-    is_run: False
+    is_run:
     data:
 
       name: 自动生成收藏网址${{random_int()}}

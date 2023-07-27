@@ -10,6 +10,7 @@ import smtplib
 from email.mime.text import MIMEText
 from utils.other_tools.allure_data.allure_report_data import TestMetrics, AllureFileClean
 from utils import config
+from email.header import Header
 
 
 class SendEmail:
@@ -28,11 +29,12 @@ class SendEmail:
         @param content: 发送内容
         @return:
         """
-        user = "慕长秋" + " " + "<" + config.email.send_user + ">"
+        # 名称只能为ascii编码
+        user = "ChangQiu" + "<" + config.email.send_user + ">"
         message = MIMEText(content, _subtype='plain', _charset='utf-8')
-        message['Subject'] = sub
-        message['From'] = user
-        message['To'] = ";".join(user_list)
+        message['Subject'] = Header(sub).encode()
+        message['From'] = Header(user).encode()
+        message['To'] = Header(";".join(user_list)).encode()
         server = smtplib.SMTP()
         server.connect(config.email.email_host)
         server.login(config.email.send_user, config.email.stamp_key)

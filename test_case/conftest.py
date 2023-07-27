@@ -15,52 +15,57 @@ from utils.other_tools.allure_data.allure_tools import allure_step, allure_step_
 from utils.cache_process.cache_control import CacheHandler
 
 
-def get_cookie():
-    url = "https://www.wanandroid.com/api/users/login"
-    data = {
-        "username": '18800000001',
-        "password": '123456'
-    }
-    headers = {'Content-Type': 'application/json'}
-    res = requests.post(url=url, data=data, verify=True, headers=headers)
-    response_cookie = res.cookies
-    cookies = ''
-    for k, v in response_cookie.items():
-        _cookie = k + "=" + v + ";"
-        cookies += _cookie
-    return cookies
-
-def get_access_token():
-    url = "http://127.0.0.1:8000/api/users/login"
-    data = {
-        "username": "admin",
-        "password": 123456
-    }
-    headers = {
-        'Content-Type': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:65.0) Gecko/20100101 Firefox/65.0'
-    }
-    res = requests.post(url=url, json=data, headers=headers).json()
-    access_token = res['data']['access_token']
-    token = f"Bearer {access_token};"
-    return token
 
 @pytest.fixture(scope="session", autouse=True)
 def work_login_cookie():
     """
     获取登录的cookie
+    :return:
     """
-    cookies = get_cookie()
+    url = "https://www.wanandroid.com/user/login"
+    data = {
+        "username": 18100005201,
+        "password": 123456
+    }
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+
+    # 请求登录接口
+    res = requests.post(url=url, data=data, verify=True, headers=headers)
+    response_cookie = res.cookies
+
+    cookies = ''
+    for k, v in response_cookie.items():
+        _cookie = k + "=" + v + ";"
+        # 拿到登录的cookie内容，cookie拿到的是字典类型，转换成对应的格式
+        cookies += _cookie
+        # 将登录接口中的cookie写入缓存中，其中login_cookie是缓存名称
     CacheHandler.update_cache(cache_name='login_cookie', value=cookies)
+    print("暂停等待获取cookie......")
+    time.sleep(5)
+    print(CacheHandler.update_cache(cache_name='login_cookie', value=cookies))
+
+
 
 @pytest.fixture(scope="session", autouse=True)
 def work_login_token():
     """
     获取登录的access_token
     """
-    token = get_access_token()
+    url = "http://127.0.0.1:8000/api/users/login"
+    data = {
+        "username": "admin",
+        "password": "123456"
+    }
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    res = requests.post(url=url, json=data, headers=headers).json()
+    access_token = res['data']['access_token']
+    token = f"Bearer {access_token}"
     CacheHandler.update_cache(cache_name='login_token', value=token)
-
+    print("暂停等待获取token......")
+    time.sleep(5)
+    print(CacheHandler.update_cache(cache_name='login_token', value=token))
 
 @pytest.fixture(scope="session", autouse=False)
 def clear_report():
@@ -79,8 +84,9 @@ def pytest_collection_modifyitems(items):
 
     # 期望用例顺序
     print("收集到的测试用例:%s" % items)
-    appoint_items = ["test_get_user_info", "test_collect_addtool", "test_Cart_List", "test_ADD", "test_Guest_ADD",
+    appoint_items = ["test_login", "test_get_user_info", "test_collect_addtool", "test_Cart_List", "test_ADD", "test_Guest_ADD",
                      "test_Clear_Cart_Item"]
+
 
     # 指定运行顺序
     run_items = []
@@ -138,3 +144,5 @@ def pytest_terminal_summary(terminalreporter):
         INFO.logger.info(f"用例成功率: {_RATE:.2f} %")
     except ZeroDivisionError:
         INFO.logger.info("用例成功率: 0.00 %")
+
+

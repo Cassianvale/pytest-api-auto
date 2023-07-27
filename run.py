@@ -57,16 +57,23 @@ def run():
 
         allure_data = AllureFileClean().get_case_count()
         notification_mapping = {
+            NotificationType.FEI_SHU.value: FeiShuTalkChatBot(allure_data).post,
             NotificationType.DING_TALK.value: DingTalkSendMsg(allure_data).send_ding_notification,
             NotificationType.WECHAT.value: WeChatSend(allure_data).send_wechat_notification,
-            NotificationType.EMAIL.value: SendEmail(allure_data).send_main,
-            NotificationType.FEI_SHU.value: FeiShuTalkChatBot(allure_data).post
+            NotificationType.EMAIL.value: SendEmail(allure_data).send_main
         }
 
         if config.notification_type != NotificationType.DEFAULT.value:
             notify_type = config.notification_type.split(",")
+
+            print("Notification的字典为: %s" % notification_mapping)
+
             for i in notify_type:
-                notification_mapping.get(i.lstrip(""))()
+                stripped_i = i.lstrip(" ")
+                print(f"剥离通知类型: {stripped_i}")# 检查去除空格后的通知类型
+                # 去除字符串中可能存在的空格
+                notification_mapping.get(stripped_i)()
+
 
         if config.excel_report:
             ErrorCaseExcel().write_case()
