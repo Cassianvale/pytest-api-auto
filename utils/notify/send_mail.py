@@ -51,7 +51,7 @@ class SendEmail:
         user_list = email.split(',')  # 多个邮箱发送，config文件中直接添加  '806029174@qq.com'
 
         sub = config.project_name + "接口自动化执行异常通知"
-        content = f"自动化测试执行完毕，程序中发现异常，请悉知。报错信息如下：\n{error_message}"
+        content = f"接口自动化测试用例执行完毕，程序中发现异常，请悉知！报错信息如下：\n{error_message}"
         self.send_mail(user_list, sub, content)
 
     def send_main(self) -> None:
@@ -64,14 +64,13 @@ class SendEmail:
 
         sub = config.project_name + "接口自动化报告"
         content = f"""
-        各位同事, 大家好:
-            自动化用例执行完成，执行结果如下:
+        您的接口自动化测试用例执行完成，执行结果如下:
             用例运行总数: {self.metrics.total} 个
             通过用例个数: {self.metrics.passed} 个
             失败用例个数: {self.metrics.failed} 个
             异常用例个数: {self.metrics.broken} 个
             跳过用例个数: {self.metrics.skipped} 个
-            成  功   率: {self.metrics.pass_rate} %
+            成  功   率: {self.metrics.pass_rate}%
 
         {self.allure_data.get_failed_cases_detail()}
 
