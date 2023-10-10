@@ -145,7 +145,7 @@ class FeiShuTalkChatBot:
                                 },
                                 {
                                     "tag": "text",
-                                    "text": f"{self.metrics.failed}"
+                                    "text": f"{self.metrics.broken}"
                                 }
                             ],  
                             [

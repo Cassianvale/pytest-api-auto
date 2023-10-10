@@ -16,6 +16,22 @@ class Context:
         self.faker = Faker(locale='zh_CN')
 
     @classmethod
+    def Ctest01(cls, index):
+        if index == 0:
+            return "shuchu"
+
+    @classmethod
+    def Ctest02(cls):
+        return "shuchu2"
+
+    @classmethod
+    def Ctest03(cls,index,index2):
+        if index == 0 and index2 == 0:
+            return "shuchu3"
+        else:
+            return "啥也没有"
+
+    @classmethod
     def random_int(cls) -> int:
         """
         :return: 随机数
@@ -203,5 +219,13 @@ def regular(target):
 
 
 if __name__ == '__main__':
-    a = "${{host()}} aaa"
-    b = regular(a)
+    
+    e = "${{Ctest01(0)}}"   # None
+    a = "${{Ctest02()}}"    # shuchu2
+    b = "${{Ctest03(0,1)}}" # 啥也没有
+    d = "${{host()}} aaa"   # http://127.0.0.1:8000 aaa
+    E = regular(e)
+    A = regular(a)
+    B = regular(b)
+    D = regular(d)
+    print(E,A,B,D)

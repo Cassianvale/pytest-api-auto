@@ -90,7 +90,7 @@ class AssertUtil:
 
         # 处理 mysql查询出来的数据类型如果是bytes类型，转换成str类型
         if isinstance(self.sql_data, bytes):
-            return self.sql_data.decode('utf=8')
+            return self.sql_data.decode('utf-8')
 
         sql_data = jsonpath(self.sql_data, self.get_value)
         assert sql_data is not False, (
