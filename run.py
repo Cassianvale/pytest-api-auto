@@ -66,15 +66,25 @@ def run():
         if config.notification_type != NotificationType.DEFAULT.value:
             notify_type = config.notification_type.split(",")
 
-            print("Notification的字典为: %s" % notification_mapping)
-
+            notification_names = []  # 存储剥离后的通知类型名称
             for i in notify_type:
                 stripped_i = i.lstrip(" ")
-                print(f"剥离通知类型: {stripped_i}")# 检查去除空格后的通知类型
-                # 去除字符串中可能存在的空格
-                notification_mapping.get(stripped_i)()
+                # 0:不发送通知 1:飞书 2:钉钉通知 3:企业微信通知 4:邮箱通知
+                if stripped_i == '1':
+                    notification_names.append("飞书")
+                elif stripped_i == '2':
+                    notification_names.append("钉钉")
+                elif stripped_i == '3':
+                    notification_names.append("微信")
+                elif stripped_i == '4':
+                    notification_names.append("Email")    
+                else:
+                    notification_names.append("默认通知类型")
+            print("==============================================")
+            print("已发送通知到: "+"、".join(notification_names))
+            print("==============================================")
 
-
+        # 收集运行失败的用例，整理成excel报告
         if config.excel_report:
             ErrorCaseExcel().write_case()
 

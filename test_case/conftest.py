@@ -67,6 +67,7 @@ def work_login_token():
     time.sleep(5)
     print(CacheHandler.update_cache(cache_name='login_token', value=token))
 
+
 @pytest.fixture(scope="session", autouse=False)
 def clear_report():
     """如clean命名无法删除报告，这里手动删除"""
