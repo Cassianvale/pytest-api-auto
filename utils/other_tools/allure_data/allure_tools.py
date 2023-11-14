@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
 import json
 import allure
 from utils.other_tools.models import AllureAttachmentType

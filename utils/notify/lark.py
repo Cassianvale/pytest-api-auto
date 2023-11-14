@@ -81,7 +81,7 @@ class FeiShuTalkChatBot:
                             [
                                 {
                                     "tag": "a",
-                                    "text": "👉点击查看测试报告",
+                                    "text": "🦊点击查看测试报告",
                                     "href": "http://activate.navicat.com:9999"
                                 }
                             ],
