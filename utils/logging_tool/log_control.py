@@ -29,7 +29,7 @@ class LogHandler:
             filename: Text,
             level: Text = "info",
             when: Text = "D",
-            fmt: Text = "%(levelname)-8s%(asctime)s%(name)s:%(filename)s:%(lineno)d %(message)s"
+            fmt: Text = "%(levelname)-8s%(asctime)s %(name)s:%(filename)s:%(lineno)d %(message)s"
     ):
         self.logger = logging.getLogger(filename)
 
@@ -66,6 +66,7 @@ class LogHandler:
             'WARNING': 'yellow',
             'ERROR': 'red',
             'CRITICAL': 'red',
+            'ERROR_symbol': '❌',
         }
 
         formatter = colorlog.ColoredFormatter(
@@ -74,11 +75,22 @@ class LogHandler:
         )
         return formatter
 
+    @staticmethod
+    def add_symbol(record, symbol):
+        """ 在日志消息前添加符号 """
+        record.msg = f"{symbol} {record.msg}"
+        return True
 
 now_time_day = time.strftime("%Y-%m-%d", time.localtime())
 INFO = LogHandler(ensure_path_sep(f"\\logs\\info-{now_time_day}.log"), level='info')
+INFO.logger.addFilter(lambda record: LogHandler.add_symbol(record, "✅"))
 ERROR = LogHandler(ensure_path_sep(f"\\logs\\error-{now_time_day}.log"), level='error')
-WARNING = LogHandler(ensure_path_sep(f'\\logs\\warning-{now_time_day}.log'))
+ERROR.logger.addFilter(lambda record: LogHandler.add_symbol(record, "❌"))
+WARNING = LogHandler(ensure_path_sep(f'\\logs\\warning-{now_time_day}.log'), level='warning')
+WARNING.logger.addFilter(lambda record: LogHandler.add_symbol(record, "⚠️"))
 
 if __name__ == '__main__':
+    INFO.logger.info("测试")
+    WARNING.logger.warning("测试")
     ERROR.logger.error("测试")
+
