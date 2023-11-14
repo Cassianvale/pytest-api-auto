@@ -66,7 +66,6 @@ class LogHandler:
             'WARNING': 'yellow',
             'ERROR': 'red',
             'CRITICAL': 'red',
-            'ERROR_symbol': '❌',
         }
 
         formatter = colorlog.ColoredFormatter(
