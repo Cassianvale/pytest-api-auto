@@ -65,7 +65,6 @@ class Context:
 
     def get_male_name(self) -> str:
         """
-
         :return: 男生姓名
         """
         male_name = self.faker.name_male()

@@ -97,7 +97,7 @@ class MysqlDB:
             @param data: 数据池
             @return:
             """
-            # 将sql 返回的所有内容全部放入对象中
+            # 将sql返回的所有字典内容全部放入对象中
             for key, value in query_data.items():
                 if isinstance(value, decimal.Decimal):
                     data[key] = float(value)
