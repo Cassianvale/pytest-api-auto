@@ -26,16 +26,17 @@ def log_decorator(switch: bool):
             res = func(*args, **kwargs)
             # 判断日志开关为开启状态
             if switch:
-                _log_msg = f"\n======================================================\n" \
-                               f"用例标题: {res.detail}\n" \
-                               f"请求路径: {res.url}\n" \
-                               f"请求方式: {res.method}\n" \
-                               f"请求头:   {res.headers}\n" \
-                               f"请求内容: {res.request_body}\n" \
-                               f"接口响应内容: {res.response_data}\n" \
-                               f"接口响应时长: {res.res_time} ms\n" \
-                               f"Http状态码: {res.status_code}\n" \
-                               "====================================================="
+                _log_msg = f"\n======================================================\n"\
+                    f"🦊 <Title>: {res.detail}\n" \
+                    f"🚀 <Request>\n" \
+                    f"      URL: {res.url}\n" \
+                    f"      Request method: {res.method}\n" \
+                    f"      Request headers: {res.headers}\n" \
+                    f"      Request body: {res.request_body}\n" \
+                    f"🌟 <Response>: {res.response_data}\n" \
+                    f"⏰ <Response time>(ms): {res.res_time}\n" \
+                    f"🧩 <Response code>: {res.status_code}\n" \
+                    "====================================================="
                 _is_run = ast.literal_eval(cache_regular(str(res.is_run)))
                 # 判断正常打印的日志，控制台输出绿色
                 if _is_run in (True, None) and res.status_code == 200:

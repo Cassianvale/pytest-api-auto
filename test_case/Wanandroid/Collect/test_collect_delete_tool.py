@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time   : 2023-10-10 10:07:19
+# @Time   : 2023-11-23 17:19:40
 
 
 import allure
@@ -12,18 +12,18 @@ from utils.read_files_tools.regular_control import regular
 from utils.requests_tool.teardown_control import TearDownHandler
 
 
-case_id = ['LR_login_01', 'LR_login_02', 'LR_login_03']
+case_id = ['collect_delete_tool_01', 'collect_delete_tool_02']
 TestData = GetTestCase.case_data(case_id)
 re_data = regular(str(TestData))
 
 
-@allure.epic("测试平台接口")
-@allure.feature("登录模块")
-class TestLrLogin:
+@allure.epic("开发平台接口")
+@allure.feature("收藏模块")
+class TestCollectDeleteTool:
 
-    @allure.story("登录")
+    @allure.story("删除收藏网站接口")
     @pytest.mark.parametrize('in_data', eval(re_data), ids=[i['detail'] for i in TestData])
-    def test_lr_login(self, in_data, case_skip):
+    def test_collect_delete_tool(self, in_data, case_skip):
         """
         :param :
         :return:
@@ -38,4 +38,4 @@ class TestLrLogin:
 
 
 if __name__ == '__main__':
-    pytest.main(['test_test_lr_login.py', '-s', '-W', 'ignore:Module already imported:pytest.PytestWarning'])
+    pytest.main(['test_test_collect_delete_tool.py', '-s', '-W', 'ignore:Module already imported:pytest.PytestWarning'])

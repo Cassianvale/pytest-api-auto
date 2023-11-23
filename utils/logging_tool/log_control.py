@@ -10,6 +10,7 @@ from logging import handlers
 from typing import Text
 import colorlog
 import time
+from pathlib import Path
 from common.setting import ensure_path_sep
 
 
@@ -29,20 +30,24 @@ class LogHandler:
             filename: Text,
             level: Text = "info",
             when: Text = "D",
-            fmt: Text = "%(levelname)-8s%(asctime)s %(name)s:%(filename)s:%(lineno)d %(message)s"
-    ):
+            ):
         self.logger = logging.getLogger(filename)
 
         formatter = self.log_color()
 
         # 设置日志格式
-        format_str = logging.Formatter(fmt)
+        format_str = logging.Formatter(
+            fmt="%(levelname)-8s%(asctime)s %(funcName)s py:%(lineno)d %(message)s", 
+            datefmt="%Y-%m-%d %H:%M:%S"
+            )
         # 设置日志级别
         self.logger.setLevel(self.level_relations.get(level))
+
         # 往屏幕上输出
         screen_output = logging.StreamHandler()
         # 设置屏幕上显示的格式
         screen_output.setFormatter(formatter)
+        
         # 往文件里写入#指定间隔时间自动生成文件的处理器
         time_rotating = handlers.TimedRotatingFileHandler(
             filename=filename,
@@ -55,7 +60,6 @@ class LogHandler:
         # 把对象加到logger里
         self.logger.addHandler(screen_output)
         self.logger.addHandler(time_rotating)
-        self.log_path = ensure_path_sep('\\logs\\log.log')
 
     @classmethod
     def log_color(cls):
@@ -69,7 +73,8 @@ class LogHandler:
         }
 
         formatter = colorlog.ColoredFormatter(
-            '%(log_color)s[%(asctime)s] [%(name)s] [%(levelname)s]: %(message)s',
+            '%(log_color)s[%(asctime)s] [%(funcName)s] [%(lineno)d] [%(levelname)s]: %(message)s',
+            datefmt='%Y-%m-%d %H:%M:%S',  # 修改日期和时间的格式
             log_colors=log_colors_config
         )
         return formatter
@@ -81,6 +86,10 @@ class LogHandler:
         return True
 
 now_time_day = time.strftime("%Y-%m-%d", time.localtime())
+
+logs_dir = Path(ensure_path_sep("\\logs"))
+logs_dir.mkdir(parents=True, exist_ok=True)
+
 INFO = LogHandler(ensure_path_sep(f"\\logs\\info-{now_time_day}.log"), level='info')
 INFO.logger.addFilter(lambda record: LogHandler.add_symbol(record, "✅"))
 ERROR = LogHandler(ensure_path_sep(f"\\logs\\error-{now_time_day}.log"), level='error')
@@ -89,7 +98,7 @@ WARNING = LogHandler(ensure_path_sep(f'\\logs\\warning-{now_time_day}.log'), lev
 WARNING.logger.addFilter(lambda record: LogHandler.add_symbol(record, "⚠️"))
 
 if __name__ == '__main__':
-    INFO.logger.info("测试")
-    WARNING.logger.warning("测试")
-    ERROR.logger.error("测试")
+    INFO.logger.info("success")
+    WARNING.logger.warning("warning")
+    ERROR.logger.error("error")
 

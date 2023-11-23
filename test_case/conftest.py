@@ -16,20 +16,50 @@ from utils.cache_process.cache_control import CacheHandler
 
 
 
+# @pytest.fixture(scope="session", autouse=True)
+# def work_login_cookie():
+#     """
+#     获取登录的cookie
+#     :return:
+#     """
+#     url = "https://www.wanandroid.com/user/login"
+#     data = {
+#         "username": 18100005201,
+#         "password": 123456
+#     }
+#     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+
+#     # 请求登录接口
+#     res = requests.post(url=url, data=data, verify=True, headers=headers)
+#     response_cookie = res.cookies
+
+#     cookies = ''
+#     for k, v in response_cookie.items():
+#         _cookie = k + "=" + v + ";"
+#         # 拿到登录的cookie内容，cookie拿到的是字典类型，转换成对应的格式
+#         cookies += _cookie
+#         # 将登录接口中的cookie写入缓存中，其中login_cookie是缓存名称
+#     CacheHandler.update_cache(cache_name='login_cookie', value=cookies)
+#     print("暂停等待获取cookie......")
+#     time.sleep(5)
+#     print(CacheHandler.update_cache(cache_name='login_cookie', value=cookies))
+
+
 @pytest.fixture(scope="session", autouse=True)
-def work_login_cookie():
+def work_login_init():
     """
     获取登录的cookie
     :return:
     """
+
     url = "https://www.wanandroid.com/user/login"
     data = {
-        "username": 18100005201,
+        "username": 18800000001,
         "password": 123456
     }
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-
     # 请求登录接口
+
     res = requests.post(url=url, data=data, verify=True, headers=headers)
     response_cookie = res.cookies
 
@@ -40,32 +70,28 @@ def work_login_cookie():
         cookies += _cookie
         # 将登录接口中的cookie写入缓存中，其中login_cookie是缓存名称
     CacheHandler.update_cache(cache_name='login_cookie', value=cookies)
-    print("暂停等待获取cookie......")
-    time.sleep(5)
-    print(CacheHandler.update_cache(cache_name='login_cookie', value=cookies))
 
 
-
-@pytest.fixture(scope="session", autouse=True)
-def work_login_token():
-    """
-    获取登录的access_token
-    """
-    url = "http://127.0.0.1:8000/api/users/login"
-    data = {
-        "username": "admin",
-        "password": "123456"
-    }
-    headers = {
-        'Content-Type': 'application/json'
-    }
-    res = requests.post(url=url, json=data, headers=headers).json()
-    access_token = res['data']['access_token']
-    token = f"Bearer {access_token}"
-    CacheHandler.update_cache(cache_name='login_token', value=token)
-    print("暂停等待获取token......")
-    time.sleep(5)
-    print(CacheHandler.update_cache(cache_name='login_token', value=token))
+# @pytest.fixture(scope="session", autouse=True)
+# def work_login_token():
+#     """
+#     获取登录的access_token
+#     """
+#     url = "http://127.0.0.1:8000/api/users/login"
+#     data = {
+#         "username": "admin",
+#         "password": "123456"
+#     }
+#     headers = {
+#         'Content-Type': 'application/json'
+#     }
+#     res = requests.post(url=url, json=data, headers=headers).json()
+#     access_token = res['data']['access_token']
+#     token = f"Bearer {access_token}"
+#     CacheHandler.update_cache(cache_name='login_token', value=token)
+#     print("暂停等待获取token......")
+#     time.sleep(5)
+#     print(CacheHandler.update_cache(cache_name='login_token', value=token))
 
 
 @pytest.fixture(scope="session", autouse=False)
