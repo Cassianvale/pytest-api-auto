@@ -6,24 +6,23 @@ redis 缓存操作封装
 """
 from typing import Text, Any
 import redis
+from utils import _data
+redis_config = _data['redis_db']
 
 
 class RedisHandler:
     """ redis 缓存读取封装 """
 
     def __init__(self):
-        self.host = '127.0.0.0'
-        self.port = 6379
-        self.database = 0
-        self.password = 123456
-        self.charset = 'UTF-8'
-        self.redis = redis.Redis(
-            self.host,
-            port=self.port,
-            password=self.password,
+        self.redis = redis.StrictRedis(
+            host=redis_config['host'],
+            port=int(redis_config['port']),
+            db=redis_config['database'],
+            password=str(redis_config['password']) if 'password' in redis_config and redis_config['password'] else None,
             decode_responses=True,
-            db=self.database
+            charset='UTF-8'
         )
+
 
     def set_string(
             self, name: Text,
@@ -62,7 +61,7 @@ class RedisHandler:
     def incr(self, key: Text):
         """
         使用 incr 方法，处理并发问题
-        当 key 不存在时，则会先初始为 0, 每次调用，则会 +1
+        当 key 不存在时，则会先初始为 0, 每次调用，则会自增 1
         :return:
         """
         self.redis.incr(key)
@@ -102,3 +101,9 @@ class RedisHandler:
         :return:
         """
         self.redis.delete(name)
+
+
+if __name__ == '__main__':
+    rh = RedisHandler()
+    rg = rh.get_many({'k1': 'v1', 'k2': 'v2'})
+    print(rg)

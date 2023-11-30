@@ -31,7 +31,6 @@ class ErrorTestCase:
                 # 收集执行失败的用例数据
                 if date['status'] == 'failed' or date['status'] == 'broken':
                     files.append(date)
-        print(files)
         return files
 
     @classmethod
@@ -307,4 +306,6 @@ class ErrorCaseExcel:
 
 
 if __name__ == '__main__':
-    ErrorCaseExcel().write_case()
+    em = ErrorCaseExcel()
+    print(em)
+    # ErrorCaseExcel().write_case()

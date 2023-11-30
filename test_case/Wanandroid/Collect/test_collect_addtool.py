@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time   : 2023-11-23 17:19:40
+# @Time   : 2023-11-30 15:59:01
 
 
 import allure
@@ -22,7 +22,7 @@ re_data = regular(str(TestData))
 class TestCollectAddtool:
 
     @allure.story("收藏网址接口")
-    @pytest.mark.parametrize('in_data', eval(re_data), ids=[i['detail'] for i in TestData])
+    @pytest.mark.parametrize('in_data' , eval(re_data), ids=[i['detail'] for i in TestData])
     def test_collect_addtool(self, in_data, case_skip):
         """
         :param :

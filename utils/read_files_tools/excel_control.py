@@ -11,42 +11,48 @@ from common.setting import ensure_path_sep
 
 
 def get_excel_data(sheet_name: str, case_name: any) -> list:
-    """
-    Read data from Excel
-    :param sheet_name: Name of the sheet in the Excel file
-    :param case_name: Name of the test case
-    :return: List of tuples with request body data and response data
-    """
+
     res_list = []
 
-    excel_dire = ensure_path_sep("\\data\\TestLogin.xls")
-    work_book = xlrd.open_workbook(excel_dire, formatting_info=True)
+    excel_dire = ensure_path_sep("\\data\\TestLogin.xlsx")
+    work_book = xlrd.open_workbook(excel_dire)
 
     # 打开对应的子表
     work_sheet = work_book.sheet_by_name(sheet_name)
     #读取一行
     idx = 0
-    for one in work_sheet.col_values(0):
+    # 遍历第二列除了表头的所有行，并提取
+
+    for one in work_sheet.col_values(1):
+        print(one)  # 可能包含浮点数导致无法迭代
+        if isinstance(one, str):
         # 运行需要运行的测试用例
-        if case_name in one:
-            req_body_data = work_sheet.cell(idx, 9).value
-            resp_data = work_sheet.cell(idx, 11).value
-            res_list.append((req_body_data, json.loads(resp_data)))
-        idx += 1
+            if case_name in one:
+                # 从该行提取请求体、响应数据
+                req_body_data = work_sheet.cell(idx, 9).value 
+                resp_data = work_sheet.cell(idx, 11).value
+                if resp_data:
+                    try:
+                        res_list.append((req_body_data, json.loads(resp_data)))
+                    except json.decoder.JSONDecodeError:
+                        print("Invalid JSON data:", resp_data)
+                idx += 1
+    print(res_list)
     return res_list
+
+if __name__ == '__main__':
+    get_excel_data("Sheet1", "44")
+
 
 def set_excel_data(sheet_index: int) -> tuple:
     """
     excel 写入
     :return:
     """
-    excel_dire = '../data/TestLogin.xls'
+    excel_dire = '../data/TestLogin.xlsx'
     work_book = xlrd.open_workbook(excel_dire, formatting_info=True)
     work_book_new = copy(work_book)
 
     work_sheet_new = work_book_new.get_sheet(sheet_index)
     return work_book_new, work_sheet_new
 
-
-if __name__ == '__main__':
-    get_excel_data("异常用例", '111')

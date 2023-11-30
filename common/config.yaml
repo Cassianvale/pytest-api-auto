@@ -18,7 +18,7 @@ real_time_update_test_cases: True
 notification_type: 4, 1
 
 # 收集失败的用例开关，整理成excel报告的形式，自动发送，目前只支持返送企业微信通知
-excel_report: False
+excel_report: True
 
 # 飞书通知，user_id通知列表可配置多个人员
 # 进入 https://open.feishu.cn/document/server-docs/contact-v3/user/get 调用API获取user_id列表
@@ -41,6 +41,14 @@ mysql_db:
   user: root
   password: '123456'
   port: 3306
+
+# redis配置(redis若未配置密码默认为空)
+redis_db:
+  host: 127.0.0.1
+  port: 6379
+  database: 0
+  password: 
+
 
 # 镜像源
 mirror_source: http://mirrors.aliyun.com/pypi/simple/
