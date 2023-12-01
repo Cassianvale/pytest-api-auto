@@ -1,5 +1,6 @@
-
 ## 框架介绍
+
+此仓库仅作示例仓库，基于此仓库的二次开发框架请移步[https://github.com/MuCqq/apitest_mcq](https://github.com/MuCqq/apitest_mcq)
 
 本框架主要是基于 Python + pytest + allure + log + yaml + mysql + redis + 钉钉通知 + Jenkins 实现的接口自动化框架。
 
