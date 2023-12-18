@@ -56,3 +56,6 @@ Thumbs.db
 venv
 *.pytest_cache
 *__pycache__
+test_case/*
+!test_case/__init__.py
+!test_case/conftest.py
