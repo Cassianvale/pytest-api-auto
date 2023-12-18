@@ -1,9 +1,7 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 
-"""
-定时器
-"""
+"""定时器"""
 
 import time
 import threading

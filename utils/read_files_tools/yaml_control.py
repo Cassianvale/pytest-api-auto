@@ -15,18 +15,13 @@ class GetYamlData:
         self.file_dir = str(file_dir)
 
     def get_yaml_data(self) -> dict:
-        """
-        获取 yaml 中的数据
-        :param: fileDir:
-        :return:
-        """
-        # 判断文件是否存在
         if os.path.exists(self.file_dir):
-            data = open(self.file_dir, 'r', encoding='utf-8')
-            res = yaml.load(data, Loader=yaml.FullLoader)
+            with open(self.file_dir, 'r', encoding='utf-8') as f:
+                _data = yaml.safe_load(f)  # yaml.load是不安全的
+                return _data
         else:
-            raise FileNotFoundError("文件路径不存在")
-        return res
+            raise FileNotFoundError(f"文件路径不存在")
+
 
     def write_yaml_data(self, key: str, value) -> int:
         """

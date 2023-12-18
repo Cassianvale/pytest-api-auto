@@ -77,7 +77,7 @@ def run():
                 elif stripped_i == '3':
                     notification_names.append("微信")
                 elif stripped_i == '4':
-                    notification_names.append("Email")    
+                    notification_names.append("Email")
                 else:
                     notification_names.append("默认通知类型")
             print("==============================================")

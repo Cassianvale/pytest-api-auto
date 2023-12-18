@@ -15,7 +15,7 @@ collect_addtool_01:
     # 请求的数据，是 params 还是 json、或者file、data
     requestType: data
     # 是否执行，空或者 true 都会执行
-    is_run: 
+    is_run:
     data:
       name: 自动化
       link: https://gitee.com/yu_xiao_qi/pytest-auto-api2

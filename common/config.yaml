@@ -4,7 +4,6 @@ env: 测试环境
 # 测试人员名称，作用于自动生成代码的作者，以及发送企业微信、钉钉通知的测试负责人
 tester_name: 慕长秋
 
-
 # 域名，支持多个域名配置
 host: http://127.0.0.1:8000
 app_host: https://www.wanandroid.com
@@ -24,7 +23,7 @@ excel_report: True
 # 进入 https://open.feishu.cn/document/server-docs/contact-v3/user/get 调用API获取user_id列表
 lark:
   webhook: https://open.feishu.cn/open-apis/bot/v2/hook/2136c7b2-a6c3-461b-b69f-4168d7aaad74
-  user_id: 
+  user_id:
     - ou_ef03d49e0b7fdbede63bcfa66286ba03
     - ou_ef03d49e0b7fdbede63bcfa66286ba03
 
@@ -47,7 +46,7 @@ redis_db:
   host: 127.0.0.1
   port: 6379
   database: 0
-  password: 
+  password:
 
 
 # 镜像源

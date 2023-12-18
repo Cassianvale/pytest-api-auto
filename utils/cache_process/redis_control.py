@@ -6,21 +6,23 @@ redis 缓存操作封装
 """
 from typing import Text, Any
 import redis
-from utils import _data
-redis_config = _data['redis_db']
 
 
 class RedisHandler:
     """ redis 缓存读取封装 """
 
     def __init__(self):
-        self.redis = redis.StrictRedis(
-            host=redis_config['host'],
-            port=int(redis_config['port']),
-            db=redis_config['database'],
-            password=str(redis_config['password']) if 'password' in redis_config and redis_config['password'] else None,
+        self.host = '127.0.0.0'
+        self.port = 6379
+        self.database = 0
+        self.password = 123456
+        self.charset = 'UTF-8'
+        self.redis = redis.Redis(
+            self.host,
+            port=self.port,
+            password=self.password,
             decode_responses=True,
-            charset='UTF-8'
+            db=self.database
         )
 
 

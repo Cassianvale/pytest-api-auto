@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""日志封装，可设置不同等级的日志颜色"""
 
-"""
-日志封装，可设置不同等级的日志颜色
-"""
 import logging
 from logging import handlers
 from typing import Text
@@ -30,16 +28,16 @@ class LogHandler:
             filename: Text,
             level: Text = "info",
             when: Text = "D",
-            ):
+    ):
         self.logger = logging.getLogger(filename)
 
         formatter = self.log_color()
 
         # 设置日志格式
         format_str = logging.Formatter(
-            fmt="%(levelname)-8s%(asctime)s %(funcName)s py:%(lineno)d %(message)s", 
+            fmt="%(levelname)-8s%(asctime)s %(funcName)s py:%(lineno)d %(message)s",
             datefmt="%Y-%m-%d %H:%M:%S"
-            )
+        )
         # 设置日志级别
         self.logger.setLevel(self.level_relations.get(level))
 
@@ -47,7 +45,7 @@ class LogHandler:
         screen_output = logging.StreamHandler()
         # 设置屏幕上显示的格式
         screen_output.setFormatter(formatter)
-        
+
         # 往文件里写入#指定间隔时间自动生成文件的处理器
         time_rotating = handlers.TimedRotatingFileHandler(
             filename=filename,
@@ -85,6 +83,7 @@ class LogHandler:
         record.msg = f"{symbol} {record.msg}"
         return True
 
+
 now_time_day = time.strftime("%Y-%m-%d", time.localtime())
 
 logs_dir = Path(ensure_path_sep("\\logs"))
@@ -101,4 +100,3 @@ if __name__ == '__main__':
     INFO.logger.info("success")
     WARNING.logger.warning("warning")
     ERROR.logger.error("error")
-

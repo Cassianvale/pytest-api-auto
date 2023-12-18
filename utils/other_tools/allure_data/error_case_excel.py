@@ -201,7 +201,7 @@ class ErrorCaseExcel:
     """ 收集运行失败的用例，整理成excel报告 """
     def __init__(self):
         _excel_template = ensure_path_sep("\\utils\\other_tools\\allure_data\\自动化异常测试用例.xlsx")
-        self._file_path = ensure_path_sep("\\Files\\" + "自动化异常测试用例.xlsx")
+        self._file_path = ensure_path_sep("\\Files\\" + "test_data" +"自动化异常测试用例.xlsx")
         # if os.path.exists(self._file_path):
         #     os.remove(self._file_path)
 
