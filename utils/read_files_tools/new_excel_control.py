@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 2023/02/18 18:05
-# @Author  : Li Hanqing
-# @FileName: config.py
-# @Description: 封装操作Excel方法
+
+'''pandas重写excel控制器'''
 
 import json
 import pandas as pd
-from common import ensure_path_sep
+from common.setting import ensure_path_sep
 from utils.logging_tool.log_control import INFO, ERROR
 from typing import Union
 
