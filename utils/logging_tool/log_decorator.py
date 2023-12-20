@@ -34,7 +34,7 @@ def log_decorator(switch: bool):
                     f"      Request headers: {res.headers}\n" \
                     f"      Request body: {res.request_body}\n" \
                     f"🌟 <Response>: {res.response_data}\n" \
-                    f"⏰ <Response time>: {res.res_time}\n (ms)" \
+                    f"⏰ <Response time>: {res.res_time} (ms)\n" \
                     f"🧩 <Response code>: {res.status_code}\n" \
                     "====================================================="
                 _is_run = ast.literal_eval(cache_regular(str(res.is_run)))
