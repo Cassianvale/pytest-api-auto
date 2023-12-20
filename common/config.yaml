@@ -5,6 +5,7 @@ env: 测试环境
 tester_name: 慕长秋
 
 # 域名，支持多个域名配置
+
 host: http://127.0.0.1:8000
 app_host: https://www.wanandroid.com
 
@@ -14,7 +15,7 @@ real_time_update_test_cases: True
 
 # 0:不发送通知 1:飞书 2:钉钉通知 3:企业微信通知 4:邮箱通知
 # 支持同时发送多个通知，如多个，则用逗号分割， 如 1, 2
-notification_type: 4, 1
+notification_type: 1, 4
 
 # 收集失败的用例开关，整理成excel报告的形式，自动发送，目前只支持返送企业微信通知
 excel_report: True

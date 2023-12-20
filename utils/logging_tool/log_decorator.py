@@ -28,13 +28,13 @@ def log_decorator(switch: bool):
             if switch:
                 _log_msg = f"\n======================================================\n"\
                     f"🦊 <Title>: {res.detail}\n" \
-                    f"🚀 <Request>\n" \
+                    f"🚀 <Request>:  \n" \
                     f"      URL: {res.url}\n" \
                     f"      Request method: {res.method}\n" \
                     f"      Request headers: {res.headers}\n" \
                     f"      Request body: {res.request_body}\n" \
                     f"🌟 <Response>: {res.response_data}\n" \
-                    f"⏰ <Response time>(ms): {res.res_time}\n" \
+                    f"⏰ <Response time>: {res.res_time}\n (ms)" \
                     f"🧩 <Response code>: {res.status_code}\n" \
                     "====================================================="
                 _is_run = ast.literal_eval(cache_regular(str(res.is_run)))

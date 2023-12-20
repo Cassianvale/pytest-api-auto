@@ -15,34 +15,13 @@ from utils.other_tools.allure_data.allure_tools import allure_step, allure_step_
 from utils.cache_process.cache_control import CacheHandler
 
 
-
-# @pytest.fixture(scope="session", autouse=True)
-# def work_login_cookie():
-#     """
-#     获取登录的cookie
-#     :return:
-#     """
-#     url = "https://www.wanandroid.com/user/login"
-#     data = {
-#         "username": 18100005201,
-#         "password": 123456
-#     }
-#     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-
-#     # 请求登录接口
-#     res = requests.post(url=url, data=data, verify=True, headers=headers)
-#     response_cookie = res.cookies
-
-#     cookies = ''
-#     for k, v in response_cookie.items():
-#         _cookie = k + "=" + v + ";"
-#         # 拿到登录的cookie内容，cookie拿到的是字典类型，转换成对应的格式
-#         cookies += _cookie
-#         # 将登录接口中的cookie写入缓存中，其中login_cookie是缓存名称
-#     CacheHandler.update_cache(cache_name='login_cookie', value=cookies)
-#     print("暂停等待获取cookie......")
-#     time.sleep(5)
-#     print(CacheHandler.update_cache(cache_name='login_cookie', value=cookies))
+def send_verify_code(phone):
+    """发送验证码"""
+    response = requests.get(url=f"https://www.wanandroid.com/user/register/captcha/sent/{phone}", params={"phone": phone}).json()
+    if response['code'] == 0 or response['msg'] == 'success':
+        return response
+    else:
+        raise Exception(f'发送验证码失败: {response}')
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -113,7 +92,6 @@ def pytest_collection_modifyitems(items):
     print("收集到的测试用例:%s" % items)
     appoint_items = ["test_login", "test_get_user_info", "test_collect_addtool", "test_Cart_List", "test_ADD", "test_Guest_ADD",
                      "test_Clear_Cart_Item"]
-
 
     # 指定运行顺序
     run_items = []

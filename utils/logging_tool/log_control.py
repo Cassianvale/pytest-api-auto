@@ -98,5 +98,5 @@ WARNING.logger.addFilter(lambda record: LogHandler.add_symbol(record, "⚠️"))
 
 if __name__ == '__main__':
     INFO.logger.info("success")
-    WARNING.logger.warning("warning")
     ERROR.logger.error("error")
+    WARNING.logger.warning("warning")

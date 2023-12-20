@@ -11,11 +11,11 @@ from pydantic import BaseModel, Field
 
 class NotificationType(Enum):
     """ 自动化通知方式 """
-    DEFAULT = '0'
-    FEI_SHU = '1'
-    DING_TALK = '2'
-    WECHAT = '3'
-    EMAIL = '4'
+    DEFAULT = ('0', "默认通知类型")
+    FEI_SHU = ('1', "飞书")
+    DING_TALK = ('2', "钉钉")
+    WECHAT = ('3', "微信")
+    EMAIL = ('4', "Email")
 
 
 @dataclass

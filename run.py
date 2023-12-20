@@ -57,32 +57,29 @@ def run():
 
         allure_data = AllureFileClean().get_case_count()
         notification_mapping = {
-            NotificationType.FEI_SHU.value: FeiShuTalkChatBot(allure_data).post,
-            NotificationType.DING_TALK.value: DingTalkSendMsg(allure_data).send_ding_notification,
-            NotificationType.WECHAT.value: WeChatSend(allure_data).send_wechat_notification,
-            NotificationType.EMAIL.value: SendEmail(allure_data).send_main
+            NotificationType.FEI_SHU.value[0]: FeiShuTalkChatBot(allure_data).post,
+            NotificationType.DING_TALK.value[0]: DingTalkSendMsg(allure_data).send_ding_notification,
+            NotificationType.WECHAT.value[0]: WeChatSend(allure_data).send_wechat_notification,
+            NotificationType.EMAIL.value[0]: SendEmail(allure_data).send_main
         }
 
-        if config.notification_type != NotificationType.DEFAULT.value:
+        if config.notification_type != NotificationType.DEFAULT.value[0]:
+            # 从配置中获取通知类型列表
             notify_type = config.notification_type.split(",")
+            # 获取通知类型名称
+            notification_names = [
+                enum_member.value[1] for enum_member in NotificationType
+                if any(enum_member.value[0] == n_type.strip() for n_type in config.notification_type.split(","))
+            ]
+        # 如果有通知类型，就执行相应的方法
+        for n_type in notify_type:
+            if n_type.strip() in notification_mapping:
+                notification_mapping[n_type.strip()]()
 
-            notification_names = []  # 存储剥离后的通知类型名称
-            for i in notify_type:
-                stripped_i = i.lstrip(" ")
-                # 0:不发送通知 1:飞书 2:钉钉通知 3:企业微信通知 4:邮箱通知
-                if stripped_i == '1':
-                    notification_names.append("飞书")
-                elif stripped_i == '2':
-                    notification_names.append("钉钉")
-                elif stripped_i == '3':
-                    notification_names.append("微信")
-                elif stripped_i == '4':
-                    notification_names.append("Email")
-                else:
-                    notification_names.append("默认通知类型")
-            print("==============================================")
-            print("已发送通知到: "+"、".join(notification_names))
-            print("==============================================")
+        # 输出发送通知的类型
+        print("==============================================")
+        print(f"已发送通知到: {'、'.join(notification_names)}")
+        print("==============================================")
 
         # 收集运行失败的用例，整理成excel报告
         if config.excel_report:
