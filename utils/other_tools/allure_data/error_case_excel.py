@@ -201,7 +201,7 @@ class ErrorCaseExcel:
     """ 收集运行失败的用例，整理成excel报告 """
     def __init__(self):
         _excel_template = ensure_path_sep("\\utils\\other_tools\\allure_data\\自动化异常测试用例.xlsx")
-        self._file_path = ensure_path_sep("\\Files\\" + "test_data" +"自动化异常测试用例.xlsx")
+        self._file_path = ensure_path_sep("\\Files\\test_data\\自动化异常测试用例.xlsx")
         # if os.path.exists(self._file_path):
         #     os.remove(self._file_path)
 
@@ -213,6 +213,11 @@ class ErrorCaseExcel:
         # 选取工作表：
         self.sheet = self.w_book.sheets['异常用例']  # 或通过索引选取
         self.case_data = ErrorTestCase()
+
+    def __del__(self):
+        self.w_book.save()
+        self.w_book.close()
+        self.app.quit()
 
     def background_color(self, position: str, rgb: tuple):
         """
