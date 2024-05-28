@@ -3,13 +3,15 @@
 
 """判断程序是否每次会更新依赖库，如有更新，则自动安装"""
 
+
 import os
-import chardet
 from common.setting import ensure_path_sep
+import chardet
 from utils.logging_tool.log_control import INFO
 from utils import config
 
 os.system("pip3 install chardet")
+
 
 
 class InstallRequirements:
