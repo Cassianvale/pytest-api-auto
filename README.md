@@ -5,8 +5,12 @@
 本仓库仅作二次开发库，具体使用请移步原作者仓库git地址: [https://gitee.com/yu_xiao_qi/pytest-auto-api2](https://gitee.com/yu_xiao_qi/pytest-auto-api2)
 
 **环境配置**
-Python3.8
-下载allure放在C:\Program Files\allure，然后配置环境变量
+1.Python3.8
+
+2.下载并配置jdk
+https://www.injdk.cn/?utm_source=testingpai.com
+
+3.下载allure放在`C:\Program Files\allure-2.29.0`，然后配置环境变量PATH=`C:\Program Files\allure-2.29.0\bin`
 https://github.com/allure-framework/allure2/releases
 
 **执行步骤**
