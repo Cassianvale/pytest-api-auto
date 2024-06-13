@@ -6,6 +6,8 @@
 
 **环境配置**
 Python3.8
+下载allure放在C:\Program Files\allure，然后配置环境变量
+https://github.com/allure-framework/allure2/releases
 
 **执行步骤**
 ```
