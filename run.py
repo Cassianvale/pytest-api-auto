@@ -6,17 +6,16 @@ import os
 import sys
 import traceback
 import pytest
+from utils import config
 from utils.read_files_tools.case_automatic_control import TestCaseAutomaticGeneration
 from utils.other_tools.models import NotificationType
-from utils.other_tools.allure_data.allure_report_data import AllureFileClean
 from utils.logging_tool.log_control import INFO
 from utils.notify.wechat_send import WeChatSend
 from utils.notify.ding_talk import DingTalkSendMsg
 from utils.notify.send_mail import SendEmail
 from utils.notify.lark import FeiShuTalkChatBot
 from utils.other_tools.allure_data.error_case_excel import ErrorCaseExcel
-
-from utils import config
+from utils.other_tools.allure_data.allure_report_data import AllureFileClean, TestMetrics
 
 
 def run():
@@ -55,7 +54,10 @@ def run():
 
         os.system(r"allure generate ./report/tmp -o ./report/html --clean")
 
-        allure_data = AllureFileClean().get_case_count()
+        allure_data_dict = AllureFileClean().get_case_count()
+        # 将字典转换为TestMetrics实例
+        allure_data = TestMetrics(**allure_data_dict)
+
         notification_mapping = {
             NotificationType.FEI_SHU.value[0]: FeiShuTalkChatBot(allure_data).post,
             NotificationType.DING_TALK.value[0]: DingTalkSendMsg(allure_data).send_ding_notification,
@@ -71,22 +73,22 @@ def run():
                 enum_member.value[1] for enum_member in NotificationType
                 if any(enum_member.value[0] == n_type.strip() for n_type in config.notification_type.split(","))
             ]
-        # 如果有通知类型，就执行相应的方法
-        for n_type in notify_type:
-            if n_type.strip() in notification_mapping:
-                notification_mapping[n_type.strip()]()
+            # 如果有通知类型，就执行相应的方法
+            for n_type in notify_type:
+                if n_type.strip() in notification_mapping:
+                    notification_mapping[n_type.strip()]()
 
-        # 输出发送通知的类型
-        print("==============================================")
-        print(f"已发送通知到: {'、'.join(notification_names)}")
-        print("==============================================")
+            # 输出发送通知的类型
+            print("==============================================")
+            print(f"已发送通知到: {'、'.join(notification_names)}")
+            print("==============================================")
 
-        # 收集运行失败的用例，整理成excel报告
-        if config.excel_report:
-            ErrorCaseExcel().write_case()
+            # 收集运行失败的用例，整理成excel报告
+            if config.excel_report:
+                ErrorCaseExcel().write_case()
 
-        # 程序运行之后，自动启动报告，如果不想启动报告，可注释这段代码
-        os.system(f"allure serve ./report/tmp -h 127.0.0.1 -p 9999")
+            # 程序运行之后，自动启动报告，如果不想启动报告，可注释这段代码
+            os.system(f"allure serve ./report/tmp -h 127.0.0.1 -p 9999")
 
     except Exception:
         # 如有异常，相关异常发送邮件

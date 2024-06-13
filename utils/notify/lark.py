@@ -147,7 +147,17 @@ class FeiShuTalkChatBot:
                                     "tag": "text",
                                     "text": f"{self.metrics.broken}"
                                 }
-                            ],  
+                            ],
+                            [
+                                {
+                                    "tag": "text",
+                                    "text": "执行时长 : "
+                                },
+                                {
+                                    "tag": "text",
+                                    "text": f"{self.metrics.time}s"
+                                }
+                            ],
                             [
                                 {
                                     "tag": "text",

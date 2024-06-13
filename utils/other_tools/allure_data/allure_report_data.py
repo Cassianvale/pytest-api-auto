@@ -48,7 +48,7 @@ class AllureFileClean:
 
     @classmethod
     def get_case_count(cls):
-        """ 统计用例数量 """
+        """ 统计用例数量 return的是字典"""
         try:
             file_name = ensure_path_sep("\\report\\html\\widgets\\summary.json")
             with open(file_name, 'r', encoding='utf-8') as file:
