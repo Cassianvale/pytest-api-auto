@@ -13,6 +13,7 @@ from utils.other_tools.models import TestCase
 from utils.read_files_tools.clean_files import del_file
 from utils.other_tools.allure_data.allure_tools import allure_step, allure_step_no
 from utils.cache_process.cache_control import CacheHandler
+from utils.other_tools.allure_data.allure_report_data import AllureFileClean
 
 
 def send_verify_code(phone):
@@ -132,22 +133,27 @@ def case_skip(in_data):
 
 
 def pytest_terminal_summary(terminalreporter):
-    _PASSED = sum(1 for i in terminalreporter.stats.get('passed', []) if i.when != 'teardown')
-    _ERROR = sum(1 for i in terminalreporter.stats.get('error', []) if i.when != 'teardown')
-    _FAILED = sum(1 for i in terminalreporter.stats.get('failed', []) if i.when != 'teardown')
-    _SKIPPED = sum(1 for i in terminalreporter.stats.get('skipped', []) if i.when != 'teardown')
-    _TOTAL = terminalreporter._numcollected
-    _TIMES = time.time() - terminalreporter._sessionstarttime
+    allure_data = AllureFileClean.get_case_count()
+
+    _PASSED = allure_data.get('passed', 0)
+    _BROKEN = allure_data.get('broken', 0)
+    _FAILED = allure_data.get('failed', 0)
+    _SKIPPED = allure_data.get('skipped', 0)
+    _TOTAL = allure_data.get('total', 0)
+    allure_time = allure_data.get('time', 0)
+    pytest_time = round(time.time() - terminalreporter._sessionstarttime, 2)
+
     INFO.logger.info(f"用例总数: {_TOTAL}")
-    INFO.logger.error(f"异常用例数: {_ERROR}")
+    INFO.logger.info(f"通过用例数: {_PASSED}")
+    ERROR.logger.error(f"异常用例数: {_BROKEN}")
     ERROR.logger.error(f"失败用例数: {_FAILED}")
     WARNING.logger.warning(f"跳过用例数: {_SKIPPED}")
-    INFO.logger.info(f"用例执行时长: {_TIMES:.2f} s")
+    INFO.logger.info(f"Allure 报告用例执行时长: {allure_time} s")
+    INFO.logger.info(f"pytest 会话总时长: {pytest_time} s")
 
     try:
         _RATE = _PASSED / _TOTAL * 100
         INFO.logger.info(f"用例成功率: {_RATE:.2f} %")
     except ZeroDivisionError:
         INFO.logger.info("用例成功率: 0.00 %")
-
 

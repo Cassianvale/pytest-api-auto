@@ -66,12 +66,12 @@ class SendEmail:
         content = f"""
         您的接口自动化测试用例执行完成，执行结果如下:
             用例运行总数: {self.metrics.total} 个
-            通过用例个数: {self.metrics.passed} 个
-            失败用例个数: {self.metrics.failed} 个
-            异常用例个数: {self.metrics.broken} 个
-            跳过用例个数: {self.metrics.skipped} 个
-            成  功   率: {self.metrics.pass_rate}%
-
+            通过用例数: {self.metrics.passed} 个
+            失败用例数: {self.metrics.failed} 个
+            异常用例数: {self.metrics.broken} 个
+            跳过用例数: {self.metrics.skipped} 个
+            成  功  率: {self.metrics.pass_rate}%
+            运行时长： {self.metrics.time} 秒
         {self.allure_data.get_failed_cases_detail()}
 
         **********************************
