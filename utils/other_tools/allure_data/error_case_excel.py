@@ -219,8 +219,6 @@ class ErrorCaseExcel:
     def __init__(self):
         self.case_data = ErrorTestCase()
         self._file_path = ensure_path_sep("\\Files\\test_data\\自动化异常测试用例.xlsx")
-        _excel_template = ensure_path_sep("\\utils\\other_tools\\allure_data\\自动化异常测试用例.xlsx")
-        shutil.copyfile(src=_excel_template, dst=self._file_path)
 
     def write_case(self):
         _data = self.case_data.get_error_case_data()
