@@ -20,12 +20,18 @@ Allure显示乱码相关问题:
 https://blog.csdn.net/weixin_43865008/article/details/124332793  
 
 
-**执行步骤**
+**执行步骤**  
+
 ```
+# 创建并配置python环境
 python -m venv .venv
 source .venv/Scripts/activate
+
+# 安装依赖
 pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
-执行test.py文件
+
+# 执行run文件
+python run.py
 ```
 
 **实现功能**
