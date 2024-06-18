@@ -20,7 +20,6 @@ class TestCaseAutomaticGeneration:
         self.yaml_case_data = None
         self.file_path = None
 
-
     @property
     def case_date_path(self) -> Text:
         """返回 yaml 用例文件路径"""
@@ -56,7 +55,6 @@ class TestCaseAutomaticGeneration:
     @property
     def allure_story(self):
         return self._get_allure_field("allureStory")
-
 
     @property
     def file_name(self) -> Text:

@@ -8,11 +8,13 @@ from email.header import Header
 from common.setting import ensure_path_sep
 from utils import config
 from utils.other_tools.allure_data.allure_report_data import AllureFileClean
+from utils.other_tools.models import TestMetrics
+
 
 class SendEmail:
     """ 发送邮箱 """
 
-    def __init__(self, case_count: dict):
+    def __init__(self, case_count: TestMetrics):
         self.case_count = case_count
         self.allure_data = AllureFileClean()
         self.CaseDetail = self.allure_data.get_failed_cases_detail()
@@ -81,13 +83,13 @@ class SendEmail:
         sub = config.project_name + "接口自动化报告"
         content = f"""
         您的接口自动化测试用例执行完成，执行结果如下:
-            用例运行总数: {self.case_count.get('total', 0)} 个
-            通过用例数: {self.case_count.get('passed', 0)} 个
-            失败用例数: {self.case_count.get('failed', 0)} 个
-            异常用例数: {self.case_count.get('broken', 0)} 个
-            跳过用例数: {self.case_count.get('skipped', 0)} 个
-            成  功  率: {self.case_count.get('pass_rate', 0)} %
-            运行时长：{self.case_count.get('time', 0)} 秒
+            用例运行总数: {self.case_count.total} 个
+            通过用例数: {self.case_count.passed} 个
+            失败用例数: {self.case_count.failed} 个
+            异常用例数: {self.case_count.broken} 个
+            跳过用例数: {self.case_count.skipped} 个
+            成  功  率: {self.case_count.pass_rate} %
+            运行时长：{self.case_count.time} 秒
         {self.allure_data.get_failed_cases_detail()}
 
         **********************************
@@ -98,7 +100,9 @@ class SendEmail:
 
 
 if __name__ == '__main__':
-    # 假设你的 Excel 文件路径如下
     excel_path = ensure_path_sep("\\Files\\test_data\\自动化异常测试用例.xlsx")
-    case_count = AllureFileClean().get_case_count()
+    case_count_dict = AllureFileClean().get_case_count()
+    case_count = TestMetrics(**case_count_dict)
     SendEmail(case_count).send_main(attachment_path=excel_path)
+
+

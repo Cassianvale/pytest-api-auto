@@ -2,7 +2,7 @@ project_name: 测试平台
 
 env: 测试环境
 # 测试人员名称，作用于自动生成代码的作者，以及发送企业微信、钉钉通知的测试负责人
-tester_name: 慕长秋
+tester_name: Cassianvale
 
 # 域名，支持多个域名配置
 
@@ -66,7 +66,6 @@ email:
   stamp_key: fvdgdbnpaackgjdd
   # 收件人改成自己的邮箱
   send_list: 1430066373@qq.com
-
 
 
 

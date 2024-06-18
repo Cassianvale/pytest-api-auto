@@ -58,16 +58,17 @@ def run():
         """
 
         os.system(r"allure generate ./report/tmp -o ./report/html --clean")
-
         allure_data_dict = AllureFileClean().get_case_count()
+
         # 将字典转换为TestMetrics实例
         allure_data = TestMetrics(**allure_data_dict)
+        excel_path = ensure_path_sep("\\Files\\test_data\\自动化异常测试用例.xlsx")
 
         notification_mapping = {
             NotificationType.FEI_SHU.value[0]: FeiShuTalkChatBot(allure_data).post,
             NotificationType.DING_TALK.value[0]: DingTalkSendMsg(allure_data).send_ding_notification,
             NotificationType.WECHAT.value[0]: WeChatSend(allure_data).send_wechat_notification,
-            NotificationType.EMAIL.value[0]: SendEmail(allure_data).send_main
+            NotificationType.EMAIL.value[0]: lambda: SendEmail(allure_data).send_main(attachment_path=excel_path)
         }
 
         if config.notification_type != NotificationType.DEFAULT.value[0]:
@@ -100,9 +101,9 @@ def run():
 
     except Exception:
         # 如有异常，相关异常发送邮件
-        e = traceback.format_exc()
+        err = traceback.format_exc()
         send_email = SendEmail(AllureFileClean.get_case_count())
-        send_email.error_mail(e)
+        send_email.error_mail(err)
         raise
 
 
