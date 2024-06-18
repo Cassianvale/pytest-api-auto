@@ -38,29 +38,25 @@ class TestCaseAutomaticGeneration:
                 f"用例中 {field} 为必填项，请检查用例内容, 用例路径：'{self.file_path}'"
             )
 
+    def _get_allure_field(self, field_name):
+        field_value = self.yaml_case_data.get("case_common").get(field_name)
+        assert field_value is not None, (
+                f"用例中 {field_name} 为必填项，请检查用例内容, 用例路径：'{self.file_path}'"
+        )
+        return field_value
+
     @property
     def allure_epic(self):
-        _allure_epic = self.yaml_case_data.get("case_common").get("allureEpic")
-        assert _allure_epic is not None, (
-                "用例中 allureEpic 为必填项，请检查用例内容, 用例路径：'%s'" % self.file_path
-        )
-        return _allure_epic
+        return self._get_allure_field("allureEpic")
 
     @property
     def allure_feature(self):
-        _allure_feature = self.yaml_case_data.get("case_common").get("allureFeature")
-        assert _allure_feature is not None, (
-                "用例中 allureFeature 为必填项，请检查用例内容, 用例路径：'%s'" % self.file_path
-        )
-        return _allure_feature
+        return self._get_allure_field("allureFeature")
 
     @property
     def allure_story(self):
-        _allure_story = self.yaml_case_data.get("case_common").get("allureStory")
-        assert _allure_story is not None, (
-                "用例中 allureStory 为必填项，请检查用例内容, 用例路径：'%s'" % self.file_path
-        )
-        return _allure_story
+        return self._get_allure_field("allureStory")
+
 
     @property
     def file_name(self) -> Text:
@@ -131,23 +127,18 @@ class TestCaseAutomaticGeneration:
         )
         return case_name
 
-    def mk_dir(self) -> None:
-        """ 判断生成自动化代码的文件夹路径是否存在，如果不存在，则自动创建 """
-        # _LibDirPath = os.path.split(self.libPagePath(filePath))[0]
-
+    def mk_dir(self):
         _case_dir_path = os.path.split(self.get_case_path)[0]
-        if not os.path.exists(_case_dir_path):
-            os.makedirs(_case_dir_path)
-            INFO.logger.info(f"已自动生成代码的文件夹路径:{_case_dir_path}")
+        os.makedirs(_case_dir_path, exist_ok=True)
+        INFO.logger.info(f"已自动生成代码的文件夹路径:{_case_dir_path}")
 
     def get_case_automatic(self) -> None:
         """ 自动生成 测试代码"""
-        file_path = get_all_files(file_path=ensure_path_sep("\\data"), yaml_data_switch=True)
+        file_paths = get_all_files(file_path=ensure_path_sep("\\data"), yaml_data_switch=True)
 
-        for file in file_path:
+        for file in file_paths:
             # 判断代理拦截的yaml文件，不生成test_case代码
             if 'proxy_data.yaml' not in file:
-                # 判断用例需要用的文件夹路径是否存在，不存在则创建
                 self.yaml_case_data = GetYamlData(file).get_yaml_data()
                 self.file_path = file
                 self.mk_dir()

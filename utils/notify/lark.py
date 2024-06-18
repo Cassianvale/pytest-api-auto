@@ -110,12 +110,22 @@ class FeiShuTalkChatBot:
                             ],
                             [
                                 {
-                                "tag": "text",
-                                "text": "成   功   率 : "
+                                    "tag": "text",
+                                    "text": "成   功   率 : "
                                 },
                                 {
                                     "tag": "text",
                                     "text": f"{self.metrics.pass_rate}%"
+                                }
+                            ],
+                            [
+                                {
+                                "tag": "text",
+                                "text": "总 用 例 数 : "
+                                },
+                                {
+                                    "tag": "text",
+                                    "text": f"{self.metrics.total}"
                                 }
                             ],
                             [

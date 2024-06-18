@@ -9,7 +9,7 @@ from common.setting import ensure_path_sep
 from utils.logging_tool.log_control import INFO, ERROR
 from typing import Union
 
-excel_path = ensure_path_sep("\\files\\test_data\\test.xlsx")
+excel_path = ensure_path_sep("\\Files\\test_data\\test.xlsx")
 
 
 def get_excel_data(sheet: str, case_name: Union[str, int], request_data_row: int, response_data_row: int):
@@ -84,5 +84,5 @@ def set_excel_data(sheet_name: str):
 
 
 if __name__ == '__main__':
-    # get_excel_data("Sheet1", 7, 6, 11)
+    get_excel_data("Sheet1", 7, 6, 11)
     set_excel_data('Sheet1')

@@ -141,15 +141,16 @@ def pytest_terminal_summary(terminalreporter):
     _SKIPPED = allure_data.get('skipped', 0)
     _TOTAL = allure_data.get('total', 0)
     allure_time = allure_data.get('time', 0)
+    
+    # 计算运行run方法的时长
     pytest_time = round(time.time() - terminalreporter._sessionstarttime, 2)
 
-    INFO.logger.info(f"用例总数: {_TOTAL}")
+    INFO.logger.info(f"总用例数: {_TOTAL}")
     INFO.logger.info(f"通过用例数: {_PASSED}")
     ERROR.logger.error(f"异常用例数: {_BROKEN}")
     ERROR.logger.error(f"失败用例数: {_FAILED}")
     WARNING.logger.warning(f"跳过用例数: {_SKIPPED}")
-    INFO.logger.info(f"Allure 报告用例执行时长: {allure_time} s")
-    INFO.logger.info(f"pytest 会话总时长: {pytest_time} s")
+    INFO.logger.info(f"pytest 用例执行总时长: {allure_time} s")
 
     try:
         _RATE = _PASSED / _TOTAL * 100

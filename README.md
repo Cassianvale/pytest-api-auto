@@ -42,3 +42,63 @@ pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 自定义拓展字段: 如用例中需要生成的随机数据，可直接调用  
 多线程执行  
 支持swagger接口文档转成yaml用例，节省用例编写时间  
++多个项目同时运行
++飞书测试报告同时@多人
++优化日志
+
+
+## 目录结构
+
+
+    ├── common                         // 配置
+    │   ├── conf.yaml                  // 公共配置
+    │   ├── setting.py                 // 环境路径存放区域
+    ├── data                           // 测试用例数据
+    ├── example                        // 测试用例示例
+    ├── File                           // 上传文件接口所需的文件存放区域
+    ├── logs                           // 日志层
+    ├── report                         // 测试报告层
+    ├── test_case                      // 测试用例代码
+    ├── utils                          // 工具类
+    │   └── assertion                
+    │       └── assert_control.py      // 断言
+    │       └── assert_type.py         // 断言类型
+    │   └── cache_process              // 缓存处理模块
+    │       └── cacheControl.py
+    │       └── redisControl.py  
+    │   └── logUtils                   // 日志处理模块
+    │       └── logControl.py
+    │       └── logDecoratrol.py       // 日志装饰器
+    │       └── runTimeDecoratrol.py   // 统计用例执行时长装饰器
+    │   └── mysqlUtils                 // 数据库模块
+    │       └── get_sql_data.py       
+    │       └── mysqlControl.py   
+    │   └── noticUtils                 // 通知模块
+    │       └── dingtalkControl.py     // 钉钉通知 
+    │       └── feishuControl.py       // 飞书通知
+    │       └── sendmailControl.py     // 邮箱通知
+    │       └── weChatSendControl.py   // 企业微信通知
+    │   └── otherUtils                 // 其他工具类
+    │       └── allureDate             // allure封装
+    │           └── allure_report_data.py // allure报告数据清洗
+    │           └── allure_tools.py   // allure 方法封装
+    │           └── error_case_excel.py   // 收集allure异常用例，生成excel测试报告
+    │       └── localIpControl.py      // 获取本地IP
+    │       └── threadControl.py       // 定时器类
+    │   └── readFilesUtils             // 文件操作
+    │       └── caseAutomaticControl.py // 自动生成测试代码 
+    │       └── clean_files.py          // 清理文件
+    │       └── excelControl.py         // 读写excel
+    │       └── get_all_files_path.py   // 获取所有文件路径
+    │       └── get_yaml_data_analysis.py // yaml用例数据清洗
+    │       └── regularControl.py        // 正则
+    │       └── yamlControl.py          // yaml文件读写
+    │   └── recordingUtils             // 代理录制
+    │       └── mitmproxyContorl.py
+    │   └── requestsUtils 
+    │       └── dependentCase.py        // 数据依赖处理
+    │       └── requestControl.py      // 请求封装
+    │   └── timeUtils
+    ├── Readme.md                       // help
+    ├── pytest.ini                  
+    ├── run.py                           // 运行入口  

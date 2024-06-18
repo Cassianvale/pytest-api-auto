@@ -21,3 +21,14 @@ def ensure_path_sep(path: Text) -> Text:
         path = os.sep.join(path.split("\\"))
 
     return root_path() + path
+
+
+def get_relative_path(target_path, start_path=os.curdir):
+    try:
+        print(f"Calculating relative path from {start_path} to {target_path}")
+        relative_path = os.path.relpath(target_path, start_path)
+        print(f"Relative path calculated: {relative_path}")
+        return relative_path
+    except Exception as e:
+        print(f"Error occurred while getting relative path: {e}")
+        return None

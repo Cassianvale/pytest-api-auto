@@ -10,6 +10,7 @@ from utils.logging_tool.log_control import INFO
 清空test_case目录下所有已经生成的用例
 '''
 
+
 def del_directories(path):
     """清空目录下的所有文件夹，排除__init__.py和conftest.py文件"""
     if not os.path.isdir(path):
@@ -32,4 +33,4 @@ def del_directories(path):
                 os.remove(file_path)
                 INFO.logger.info(f"已删除文件: {file_path}")
 
-    INFO.logger.info(f"目录清空完成: {path}")
+    INFO.logger.info(f"以上文件夹已清空完成")

@@ -83,6 +83,10 @@ class LogHandler:
             log_colors=colors
         )
 
+    def log_exception(self, msg, *args, **kwargs):
+        """ 记录异常信息，确保堆栈跟踪信息被记录 """
+        self.logger.error(msg, exc_info=True, *args, **kwargs)
+
 
 # 创建日志文件目录
 now_time_day = time.strftime("%Y-%m-%d", time.localtime())
@@ -92,15 +96,20 @@ logs_dir.mkdir(parents=True, exist_ok=True)
 # 创建不同级别的日志处理器
 INFO = LogHandler(ensure_path_sep(f"\\logs\\info-{now_time_day}.log"), level='info')
 ERROR = LogHandler(ensure_path_sep(f"\\logs\\error-{now_time_day}.log"), level='error')
-DEBUG = LogHandler(ensure_path_sep(f"\\logs\\debug-{now_time_day}.log"), level='debug')
+# DEBUG = LogHandler(ensure_path_sep(f"\\logs\\debug-{now_time_day}.log"), level='debug')
 WARNING = LogHandler(ensure_path_sep(f"\\logs\\warning-{now_time_day}.log"), level='warning')
 
 if __name__ == '__main__':
-    print(root_path())
-    INFO.logger.info("Success message")
-    INFO.logger.error("TEST")
-    INFO.logger.critical("Critical message")
-    DEBUG.logger.info("Debug Info message")
-    DEBUG.logger.debug("Debug message")
-    ERROR.logger.error("Error message")
-    WARNING.logger.warning("Warning message")
+    try:
+        INFO.logger.info("This is an info message")
+        INFO.logger.error("This is an error message")
+        INFO.logger.critical("This is a critical message")
+        # DEBUG.logger.info("Debug Info message")
+        # DEBUG.logger.debug("Debug message")
+        ERROR.logger.error("This is an error message")
+        WARNING.logger.warning("This is a warning message")
+
+        # 模拟异常以记录堆栈跟踪信息
+        1 / 0
+    except Exception as e:
+        ERROR.log_exception("An exception occurred")

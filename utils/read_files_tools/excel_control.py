@@ -13,7 +13,7 @@ from common.setting import ensure_path_sep
 def get_excel_data(sheet_name: str, case_name: any) -> list:
     res_list = []
 
-    excel_dire = ensure_path_sep("\\data\\TestLogin.xlsx")
+    excel_dire = ensure_path_sep("\\Files\\TestLogin.xlsx")
     work_book = xlrd.open_workbook(excel_dire)
 
     # 打开对应的子表
@@ -45,7 +45,7 @@ def set_excel_data(sheet_index: int) -> tuple:
     excel 写入
     :return:
     """
-    excel_dire = '../data/TestLogin.xlsx'
+    excel_dire = '../Files/TestLogin.xlsx'
     work_book = xlrd.open_workbook(excel_dire, formatting_info=True)
     work_book_new = copy(work_book)
 

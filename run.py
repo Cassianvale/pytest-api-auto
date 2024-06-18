@@ -6,6 +6,8 @@ import os
 import sys
 import traceback
 import pytest
+
+from common.setting import ensure_path_sep
 from utils import config
 from utils.read_files_tools.case_automatic_control import TestCaseAutomaticGeneration
 from utils.other_tools.models import NotificationType
@@ -16,6 +18,8 @@ from utils.notify.send_mail import SendEmail
 from utils.notify.lark import FeiShuTalkChatBot
 from utils.other_tools.allure_data.error_case_excel import ErrorCaseExcel
 from utils.other_tools.allure_data.allure_report_data import AllureFileClean, TestMetrics
+from utils.logging_tool.log_control import ERROR
+from utils.read_files_tools.clean_case import del_directories
 
 
 def run():
@@ -35,6 +39,7 @@ def run():
         )
 
         # 判断现有的测试用例，如果未生成测试代码，则自动生成
+        # 不能存在相同case_id和相同文件名的用例，否则报错并exit
         TestCaseAutomaticGeneration().get_case_automatic()
 
         pytest.main(['-s', '-W', 'ignore:Module already imported:pytest.PytestWarning',
@@ -75,12 +80,15 @@ def run():
             ]
             # 如果有通知类型，就执行相应的方法
             for n_type in notify_type:
+                # 确保 n_type.strip() 是 notification_mapping 的一个键
                 if n_type.strip() in notification_mapping:
                     notification_mapping[n_type.strip()]()
+                else:
+                    print(f"未知的notification类型: {n_type.strip()}")
 
             # 输出发送通知的类型
             print("==============================================")
-            print(f"已发送通知到: {'、'.join(notification_names)}")
+            print(f"已发送通知到: {', '.join(notification_names)}")
             print("==============================================")
 
             # 收集运行失败的用例，整理成excel报告
@@ -99,5 +107,11 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    try:
+        """清空已自动生成的用例重新运行(无需要注释下面两行即可)"""
+        directory = ensure_path_sep("\\test_case")
+        del_directories(directory)
+        run()
+    except Exception as e:
+        ERROR.log_exception("An exception occurred")
 

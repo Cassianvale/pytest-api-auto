@@ -287,7 +287,6 @@ class ErrorCaseExcel:
             WeChatSend(AllureFileClean().get_case_count()).send_file_msg(self._file_path)
 
 
-# 使用上下文管理器的示例
 if __name__ == "__main__":
     with ErrorCaseExcel() as excel:
         excel.write_case()
