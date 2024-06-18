@@ -44,8 +44,7 @@ pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 支持swagger接口文档转成yaml用例，节省用例编写时间  
 +多个项目同时运行
 +飞书测试报告同时@多人
-+优化日志
-
++堆栈跟踪日志&飞书通知优化
 
 ## 目录结构
 
@@ -54,7 +53,6 @@ pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
     │   ├── conf.yaml                  // 公共配置
     │   ├── setting.py                 // 环境路径存放区域
     ├── data                           // 测试用例数据
-    ├── example                        // 测试用例示例
     ├── File                           // 上传文件接口所需的文件存放区域
     ├── logs                           // 日志层
     ├── report                         // 测试报告层
@@ -87,6 +85,8 @@ pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
     │       └── threadControl.py       // 定时器类
     │   └── readFilesUtils             // 文件操作
     │       └── caseAutomaticControl.py // 自动生成测试代码 
+    │       └── clean_case.py           // 清理所有已生成的测试用例
+    │       └── new_excel_control.py    // pandas重构excel控制器(未实装到用例)
     │       └── clean_files.py          // 清理文件
     │       └── excelControl.py         // 读写excel
     │       └── get_all_files_path.py   // 获取所有文件路径
