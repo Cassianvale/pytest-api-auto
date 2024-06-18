@@ -77,6 +77,8 @@ class GetCaseData(GetYamlData):
         # 正则处理yaml文件中的数据
         re_data = regular(str(_yaml_data))
         return ast.literal_eval(re_data)
+
+
 if __name__ == '__main__':
     ym = GetYamlData(ensure_path_sep("\\util"))
     ym.get_yaml_data()

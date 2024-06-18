@@ -18,7 +18,8 @@ from utils.other_tools.allure_data.allure_report_data import AllureFileClean
 
 def send_verify_code(phone):
     """发送验证码"""
-    response = requests.get(url=f"https://www.wanandroid.com/user/register/captcha/sent/{phone}", params={"phone": phone}).json()
+    response = requests.get(url=f"https://www.wanandroid.com/user/register/captcha/sent/{phone}",
+                            params={"phone": phone}).json()
     if response['code'] == 0 or response['msg'] == 'success':
         return response
     else:
@@ -52,69 +53,54 @@ def work_login_init():
     CacheHandler.update_cache(cache_name='login_cookie', value=cookies)
 
 
-# @pytest.fixture(scope="session", autouse=True)
-# def work_login_token():
-#     """
-#     获取登录的access_token
-#     """
-#     url = "http://127.0.0.1:8000/api/users/login"
-#     data = {
-#         "username": "admin",
-#         "password": "123456"
-#     }
-#     headers = {
-#         'Content-Type': 'application/json'
-#     }
-#     res = requests.post(url=url, json=data, headers=headers).json()
-#     access_token = res['data']['access_token']
-#     token = f"Bearer {access_token}"
-#     CacheHandler.update_cache(cache_name='login_token', value=token)
-#     print("暂停等待获取token......")
-#     time.sleep(5)
-#     print(CacheHandler.update_cache(cache_name='login_token', value=token))
-
-
 @pytest.fixture(scope="session", autouse=False)
 def clear_report():
     """如clean命名无法删除报告，这里手动删除"""
     del_file(ensure_path_sep("\\report"))
 
 
-def pytest_collection_modifyitems(items):
-    """
-    测试用例收集完成时，将收集到的 item 的 name 和 node_id 的中文显示在控制台上
-    :return:
-    """
-    for item in items:
-        item.name = item.name.encode("utf-8").decode("unicode_escape")
-        item._nodeid = item.nodeid.encode("utf-8").decode("unicode_escape")
-
-    # 期望用例顺序
-    print("收集到的测试用例:%s" % items)
-    appoint_items = ["test_login", "test_get_user_info", "test_collect_addtool", "test_Cart_List", "test_ADD", "test_Guest_ADD",
-                     "test_Clear_Cart_Item"]
-
-    # 指定运行顺序
-    run_items = []
-    for i in appoint_items:
-        for item in items:
-            module_item = item.name.split("[")[0]
-            if i == module_item:
-                run_items.append(item)
-
-    for i in run_items:
-        run_index = run_items.index(i)
-        items_index = items.index(i)
-
-        if run_index != items_index:
-            n_data = items[run_index]
-            run_index = items.index(n_data)
-            items[items_index], items[run_index] = items[run_index], items[items_index]
-
-
 def pytest_configure(config):
     config.addinivalue_line("markers", 'smoke')
     config.addinivalue_line("markers", '回归测试')
+    config.addinivalue_line(
+        "markers", "dependency: mark test to be dependent on other tests"
+    )
+
+
+def pytest_collection_modifyitems(items):
+    """
+    测试用例收集完成时，将收集到的 item 的 name 和 node_id 的中文显示在控制台上
+    """
+    dependencies = {}
+    standalone_items = []
+
+    for item in items:
+        dependency_marker = item.get_closest_marker("dependency")
+        if dependency_marker:
+            depends = dependency_marker.kwargs.get("depends")
+            if depends:
+                for dep in depends:
+                    if dep not in dependencies:
+                        dependencies[dep] = []
+                    dependencies[dep].append(item)
+            else:
+                if item.nodeid not in dependencies:
+                    dependencies[item.nodeid] = []
+        else:
+            standalone_items.append(item)
+
+    sorted_items = []
+    for dep, dep_items in dependencies.items():
+        if dep not in items:
+            continue
+        dep_index = items.index(dep)
+        sorted_items.append(items.pop(dep_index))
+        for dep_item in dep_items:
+            if dep_item in items:
+                sorted_items.append(items.pop(items.index(dep_item)))
+
+    sorted_items.extend(standalone_items)
+    items[:] = sorted_items
 
 
 @pytest.fixture(scope="function", autouse=True)
@@ -154,4 +140,3 @@ def pytest_terminal_summary():
         INFO.logger.info(f"用例成功率: {_RATE:.2f} %")
     except ZeroDivisionError:
         INFO.logger.info("用例成功率: 0.00 %")
-
