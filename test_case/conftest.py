@@ -132,7 +132,7 @@ def case_skip(in_data):
         pytest.skip()
 
 
-def pytest_terminal_summary(terminalreporter):
+def pytest_terminal_summary():
     allure_data = AllureFileClean.get_case_count()
 
     _PASSED = allure_data.get('passed', 0)
@@ -141,9 +141,6 @@ def pytest_terminal_summary(terminalreporter):
     _SKIPPED = allure_data.get('skipped', 0)
     _TOTAL = allure_data.get('total', 0)
     allure_time = allure_data.get('time', 0)
-    
-    # 计算运行run方法的时长
-    pytest_time = round(time.time() - terminalreporter._sessionstarttime, 2)
 
     INFO.logger.info(f"总用例数: {_TOTAL}")
     INFO.logger.info(f"通过用例数: {_PASSED}")

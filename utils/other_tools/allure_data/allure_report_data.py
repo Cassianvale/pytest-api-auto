@@ -61,8 +61,7 @@ class AllureFileClean:
             if _case_count["total"] > 0:
                 # 计算用例成功率
                 run_case_data["pass_rate"] = round(
-                    (_case_count["passed"] + _case_count["skipped"]) / _case_count["total"] * 100, 2
-                )
+                    (_case_count["passed"] + _case_count["skipped"]) / _case_count["total"] * 100, 2)
             else:
                 # 如果未运行用例，则成功率为 0.0
                 run_case_data["pass_rate"] = 0.0

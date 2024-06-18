@@ -6,6 +6,7 @@
 /.vscode/
 /bin/
 /report/
+自动化异常测试用例.xlsx
 !index.pyc
 *.pyc
 .classpath
