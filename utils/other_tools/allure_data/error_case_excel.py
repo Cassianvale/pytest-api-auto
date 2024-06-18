@@ -4,7 +4,9 @@
 import json
 import shutil
 import ast
-import xlwings as xw
+import pandas as pd
+from openpyxl import load_workbook
+from openpyxl.styles import Alignment, Font, PatternFill
 from common.setting import ensure_path_sep
 from utils.read_files_tools.get_all_files_path import get_all_files
 from utils.notify.wechat_send import WeChatSend
@@ -12,7 +14,7 @@ from utils.other_tools.allure_data.allure_report_data import AllureFileClean
 
 
 class ErrorTestCase:
-    """ 收集错误的excel """
+    """ 收集错误的用例 """
 
     def __init__(self):
         self.test_case_path = ensure_path_sep("\\report\\html\\data\\test-cases\\")
@@ -215,78 +217,86 @@ class ErrorCaseExcel:
     """ 收集运行失败的用例，整理成excel报告 """
 
     def __init__(self):
-        _excel_template = ensure_path_sep("\\utils\\other_tools\\allure_data\\自动化异常测试用例.xlsx")
-        self._file_path = ensure_path_sep("\\Files\\test_data\\自动化异常测试用例.xlsx")
-        shutil.copyfile(src=_excel_template, dst=self._file_path)
-        self.app = xw.App(visible=False, add_book=False)
-        self.w_book = self.app.books.open(self._file_path, read_only=False)
-        self.sheet = self.w_book.sheets['异常用例']
         self.case_data = ErrorTestCase()
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.close()
-
-    def close(self):
-        """显式关闭资源的方法"""
-        if self.w_book:
-            self.w_book.save()
-            self.w_book.close()
-        if self.app:
-            self.app.quit()
-
-    def background_color(self, position: str, rgb: tuple):
-        rng = self.sheet.range(position)
-        excel_rgb = rng.color = rgb
-        return excel_rgb
-
-    def column_width(self, position: str, width: int):
-        rng = self.sheet.range(position)
-        excel_column_width = rng.column_width = width
-        return excel_column_width
-
-    def row_height(self, position, height):
-        rng = self.sheet.range(position)
-        excel_row_height = rng.row_height = height
-        return excel_row_height
-
-    def column_width_adaptation(self, position):
-        rng = self.sheet.range(position)
-        auto_fit = rng.columns.autofit()
-        return auto_fit
-
-    def row_width_adaptation(self, position):
-        rng = self.sheet.range(position)
-        row_adaptation = rng.rows.autofit()
-        return row_adaptation
-
-    def write_excel_content(self, position: str, value: str):
-        self.sheet.range(position).value = value
+        self._file_path = ensure_path_sep("\\Files\\test_data\\自动化异常测试用例.xlsx")
+        _excel_template = ensure_path_sep("\\utils\\other_tools\\allure_data\\自动化异常测试用例.xlsx")
+        shutil.copyfile(src=_excel_template, dst=self._file_path)
 
     def write_case(self):
         _data = self.case_data.get_error_case_data()
         if len(_data) > 0:
-            num = 2
-            for data in _data:
-                self.write_excel_content(position="A" + str(num), value=str(self.case_data.get_uid(data)))
-                self.write_excel_content(position='B' + str(num), value=str(self.case_data.get_case_name(data)))
-                self.write_excel_content(position="C" + str(num), value=str(self.case_data.get_case_url(data)))
-                self.write_excel_content(position="D" + str(num), value=str(self.case_data.get_method(data)))
-                self.write_excel_content(position="E" + str(num), value=str(self.case_data.get_request_type(data)))
-                self.write_excel_content(position="F" + str(num), value=str(self.case_data.get_headers(data)))
-                self.write_excel_content(position="G" + str(num), value=str(self.case_data.get_case_data(data)))
-                self.write_excel_content(position="H" + str(num), value=str(self.case_data.get_dependence_case(data)))
-                self.write_excel_content(position="I" + str(num), value=str(self.case_data.get_assert(data)))
-                self.write_excel_content(position="J" + str(num), value=str(self.case_data.get_sql(data)))
-                self.write_excel_content(position="K" + str(num), value=str(self.case_data.get_case_time(data)))
-                self.write_excel_content(position="L" + str(num), value=str(self.case_data.get_response(data)))
-                num += 1
-            self.close()
+            data = []
+            for case in _data:
+                row = {
+                    'UID': self.case_data.get_uid(case),
+                    '用例名称': self.case_data.get_case_name(case),
+                    'URL': self.case_data.get_case_url(case),
+                    '请求方式': self.case_data.get_method(case),
+                    '请求类型': self.case_data.get_request_type(case),
+                    '请求头': self.case_data.get_headers(case),
+                    '请求内容': self.case_data.get_case_data(case),
+                    '依赖用例': self.case_data.get_dependence_case(case),
+                    '断言内容': self.case_data.get_assert(case),
+                    'SQL': self.case_data.get_sql(case),
+                    '运行时长': self.case_data.get_case_time(case),
+                    '响应内容': self.case_data.get_response(case)
+                }
+                data.append(row)
+
+            df = pd.DataFrame(data)
+            df.to_excel(self._file_path, sheet_name='异常用例', index=False)
+
+            # 使用 openpyxl 加载生成的 Excel 文件，并设置样式
+            self.format_excel()
+
             WeChatSend(AllureFileClean().get_case_count()).send_file_msg(self._file_path)
+
+    def format_excel(self):
+        workbook = load_workbook(self._file_path)
+        sheet = workbook['异常用例']
+
+        # 设置表头样式
+        header_font = Font(bold=True, color="FFFFFF")
+        header_fill = PatternFill("solid", fgColor="548235")
+        header_alignment = Alignment(vertical="center", horizontal="center")
+        for cell in sheet[1]:
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.alignment = header_alignment
+
+        # 表头高度
+        sheet.row_dimensions[1].height = 20
+
+        # 列宽度
+        column_widths = {
+            'A': 15,  # UID
+            'B': 20,  # 用例名称
+            'C': 25,  # URL
+            'D': 10,  # 请求方式
+            'E': 10,  # 请求类型
+            'F': 30,  # 请求头
+            'G': 30,  # 请求内容
+            'H': 30,  # 依赖用例
+            'I': 30,  # 断言内容
+            'J': 30,  # SQL
+            'K': 10,  # 运行时长
+            'L': 30  # 响应内容
+        }
+
+        for col, width in column_widths.items():
+            sheet.column_dimensions[col].width = width
+
+        # 设置自动换行、行高以及顶端对齐和左对齐
+        for row in sheet.iter_rows(min_row=2, max_col=sheet.max_column, max_row=sheet.max_row):
+            for cell in row:
+                cell.alignment = Alignment(wrap_text=True, vertical="top", horizontal="left")
+                # 设置行高
+                sheet.row_dimensions[cell.row].height = 50
+
+        workbook.save(self._file_path)
+        workbook.close()
 
 
 if __name__ == "__main__":
-    with ErrorCaseExcel() as excel:
-        excel.write_case()
+    excel = ErrorCaseExcel()
+    excel.write_case()
