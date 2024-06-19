@@ -5,7 +5,7 @@ permissions:
 
 on:
   schedule:
-    - cron: "0 0 * * *" # every day
+    - cron: "0 * * * *" # every day
   workflow_dispatch:
 
 jobs:
@@ -15,11 +15,11 @@ jobs:
     if: ${{ github.event.repository.fork }}
 
     steps:
-      # ²½Öè 1: ÔËÐÐ±ê×¼µÄ checkout ²Ù×÷
+      # ï¿½ï¿½ï¿½ï¿½ 1: ï¿½ï¿½ï¿½Ð±ï¿½×¼ï¿½ï¿½ checkout ï¿½ï¿½ï¿½ï¿½
       - name: Checkout target repo
         uses: actions/checkout@v3
 
-      # ²½Öè 2: ÔËÐÐÍ¬²½²Ù×÷
+      # ï¿½ï¿½ï¿½ï¿½ 2: ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       - name: Sync upstream changes
         id: sync
         uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
@@ -27,7 +27,7 @@ jobs:
           upstream_sync_repo: Cassianvale/pytest-api-auto
           upstream_sync_branch: main
           target_sync_branch: main
-          target_repo_token: ${{ secrets.GITHUB_TOKEN }} # ×Ô¶¯Éú³É£¬ÎÞÐèÉèÖÃ
+          target_repo_token: ${{ secrets.GITHUB_TOKEN }} # ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½É£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
           # Set test_mode true to run tests instead of the true action!!
           test_mode: false
@@ -35,6 +35,6 @@ jobs:
       - name: Sync check
         if: failure()
         run: |
-          echo "[Error] ÓÉÓÚÉÏÓÎ²Ö¿âµÄ workflow ÎÄ¼þ±ä¸ü£¬µ¼ÖÂ GitHub ×Ô¶¯ÔÝÍ£ÁË±¾´Î×Ô¶¯¸üÐÂ£¬ÄãÐèÒªÊÖ¶¯ Sync Fork Ò»´Î"
+          echo "[Error] ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î²Ö¿ï¿½ï¿½ workflow ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ GitHub ï¿½Ô¶ï¿½ï¿½ï¿½Í£ï¿½Ë±ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Ö¶ï¿½ Sync Fork Ò»ï¿½ï¿½"
           echo "[Error] Due to a change in the workflow file of the upstream repository, GitHub has automatically suspended the scheduled automatic update. You need to manually sync your fork. Please refer to the detailed tutorial for instructions: https://github.com/Yidadaa/ChatGPT-Next-Web#enable-automatic-updates"
           exit 1
