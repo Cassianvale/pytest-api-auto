@@ -75,6 +75,10 @@ def pytest_collection_modifyitems(items):
     standalone_items = []
 
     for item in items:
+        # 解码 item 的 name 和 nodeid
+        item.name = item.name.encode("utf-8").decode("unicode_escape")
+        item._nodeid = item.nodeid.encode("utf-8").decode("unicode_escape")
+        
         dependency_marker = item.get_closest_marker("dependency")
         if dependency_marker:
             depends = dependency_marker.kwargs.get("depends")
@@ -91,9 +95,9 @@ def pytest_collection_modifyitems(items):
 
     sorted_items = []
     for dep, dep_items in dependencies.items():
-        if dep not in items:
+        if dep not in [i.nodeid for i in items]:
             continue
-        dep_index = items.index(dep)
+        dep_index = next(i for i, v in enumerate(items) if v.nodeid == dep)
         sorted_items.append(items.pop(dep_index))
         for dep_item in dep_items:
             if dep_item in items:
