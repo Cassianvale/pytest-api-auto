@@ -6,7 +6,7 @@
 
 **环境配置**  
 
-1. 配置环境Python 3.8  
+1. 配置环境Python 3.11  
 
 2. 下载并配置jdk环境变量  
 https://www.injdk.cn/?utm_source=testingpai.com  
@@ -23,15 +23,15 @@ https://blog.csdn.net/weixin_43865008/article/details/124332793
 **执行步骤**  
 
 ```
-# 创建并配置python环境
-python -m venv .venv
-source .venv/Scripts/activate
+# 创建并配置python环境  
+python -m venv .venv  
+source .venv/Scripts/activate  
 
-# 安装依赖
-pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+# 安装依赖  
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple  
 
-# 执行run文件
-python run.py
+# 执行run文件  
+python run.py  
 ```
 
 **实现功能**
@@ -50,7 +50,7 @@ python run.py
 支持swagger接口文档转成yaml用例，节省用例编写时间  
 +多个项目同时运行  
 +飞书测试报告同时@多人  
-+堆栈跟踪日志&飞书通知优化  
++日志&飞书通知优化  
 
 ## 目录结构
 

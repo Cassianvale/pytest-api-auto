@@ -42,8 +42,16 @@ def run():
         # 不能存在相同case_id和相同文件名的用例，否则报错并exit
         TestCaseAutomaticGeneration().get_case_automatic()
 
+        # --alluredir=./report/tmp  生成Allure结果
+
         pytest.main(['-s', '-W', 'ignore:Module already imported:pytest.PytestWarning',
-                     '--alluredir', './report/tmp', "--clean-alluredir"])
+                        '--alluredir', './report/tmp', "--clean-alluredir"])
+
+        # 检查临时结果文件是否生成
+        if os.path.exists('./report/tmp'):
+            print("Allure temporary results generated successfully")
+        else:
+            print("Failed to generate Allure temporary results")
 
         """
                    --reruns: 失败重跑次数
@@ -92,7 +100,7 @@ def run():
             print(f"已发送通知到: {', '.join(notification_names)}")
             print("==============================================")
 
-            # 收集运行失败的用例，整理成excel报告
+            # 收集运行失败的用例，整理成excel报告(ErrorCaseExcel自定义excel样式)
             if config.excel_report:
                 ErrorCaseExcel().write_case()
 
@@ -100,7 +108,7 @@ def run():
             os.system(f"allure serve ./report/tmp -h 127.0.0.1 -p 9999")
 
     except Exception:
-        # 如有异常，相关异常发送邮件
+        # 异常邮件发送
         err = traceback.format_exc()
         send_email = SendEmail(AllureFileClean.get_case_count())
         send_email.error_mail(err)
@@ -110,8 +118,8 @@ def run():
 if __name__ == '__main__':
     try:
         """清空已自动生成的用例重新运行(无需要注释下面两行即可)"""
-        directory = ensure_path_sep("\\test_case")
-        del_directories(directory)
+        # directory = ensure_path_sep("\\test_case")
+        # del_directories(directory)
         run()
     except Exception as e:
         ERROR.log_exception("An exception occurred")

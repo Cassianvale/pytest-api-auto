@@ -22,6 +22,7 @@ excel_report: True
 
 # 飞书通知，user_id通知列表可配置多个人员
 # 进入 https://open.feishu.cn/document/server-docs/contact-v3/user/get 调用API获取user_id列表
+# 如何获取自己的user_id: https://open.feishu.cn/document/faq/trouble-shooting/how-to-obtain-user-id
 lark:
   webhook: https://open.feishu.cn/open-apis/bot/v2/hook/2136c7b2-a6c3-461b-b69f-4168d7aaad74
   user_id:
