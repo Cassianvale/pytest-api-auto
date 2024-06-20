@@ -77,7 +77,7 @@ def pytest_collection_modifyitems(items):
         # 解码 item 的 name 和 nodeid
         item.name = item.name.encode("utf-8").decode("unicode_escape")
         item._nodeid = item.nodeid.encode("utf-8").decode("unicode_escape")
-        
+
         dependency_marker = item.get_closest_marker("dependency")
         if dependency_marker:
             depends = dependency_marker.kwargs.get("depends")
@@ -109,8 +109,8 @@ def pytest_collection_modifyitems(items):
 @pytest.fixture(scope="function", autouse=True)
 def case_skip(request, in_data):
     """处理跳过用例"""
-    in_data = GetTestCase(**in_data)
-    if ast.literal_eval(cache_regular(str(in_data.is_run))) is False:
+    case_data = in_data
+    if ast.literal_eval(cache_regular(str(case_data['is_run']))) is False:
         allure.dynamic.title(in_data.detail)
         allure_step_no(f"请求URL: {in_data.is_run}")
         allure_step_no(f"请求方式: {in_data.method}")
