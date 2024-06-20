@@ -130,6 +130,17 @@ class TestCaseAutomaticGeneration:
         os.makedirs(_case_dir_path, exist_ok=True)
         INFO.logger.info(f"自动生成测试用例代码:{_case_dir_path}")
 
+    def get_case_dependencies(self, case_data):
+        """
+        获取用例的依赖关系
+        """
+        dependencies = []
+        if case_data.get('dependence_case_data'):
+            dependencies.extend([dep['case_id'] for dep in case_data['dependence_case_data']])
+        if case_data.get('teardown'):
+            dependencies.extend([dep['case_id'] for dep in case_data['teardown']])
+        return dependencies
+    
     def get_case_automatic(self) -> None:
         """ 自动生成测试代码"""
         file_paths = get_all_files(file_path=ensure_path_sep("\\data"), yaml_data_switch=True)
@@ -140,15 +151,20 @@ class TestCaseAutomaticGeneration:
                 self.yaml_case_data = GetYamlData(file).get_yaml_data()
                 self.file_path = file
                 self.mk_dir()
-                write_testcase_file(
-                    allure_epic=self.allure_epic,
-                    allure_feature=self.allure_feature,
-                    class_title=self.get_test_class_title,
-                    func_title=self.func_title,
-                    case_path=self.get_case_path,
-                    case_ids=self.case_ids,
-                    file_name=self.get_file_name,
-                    allure_story=self.allure_story
+
+                for case_id in self.case_ids:
+                    case_data = self.yaml_case_data[case_id]
+                    dependencies = self.get_case_dependencies(case_data)
+                    write_testcase_file(
+                        allure_epic=self.allure_epic,
+                        allure_feature=self.allure_feature,
+                        class_title=self.get_test_class_title,
+                        func_title=f"{self.func_title}_{case_id}",
+                        case_path=self.get_case_path,
+                        case_ids=[case_id],
+                        file_name=self.get_file_name,
+                        allure_story=self.allure_story,
+                        dependencies=dependencies
                     )
 
 

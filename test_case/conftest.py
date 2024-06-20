@@ -9,6 +9,7 @@ import ast
 from common.setting import ensure_path_sep
 from utils.requests_tool.request_control import cache_regular
 from utils.logging_tool.log_control import INFO, ERROR, WARNING
+from utils.read_files_tools.get_yaml_data_analysis import GetTestCase
 from utils.other_tools.models import TestCase
 from utils.read_files_tools.clean_files import del_file
 from utils.other_tools.allure_data.allure_tools import allure_step, allure_step_no
@@ -62,9 +63,7 @@ def clear_report():
 def pytest_configure(config):
     config.addinivalue_line("markers", 'smoke')
     config.addinivalue_line("markers", '回归测试')
-    config.addinivalue_line(
-        "markers", "dependency: mark test to be dependent on other tests"
-    )
+    config.addinivalue_line("markers", "dependency: mark test to be dependent on other tests")
 
 
 def pytest_collection_modifyitems(items):
@@ -108,9 +107,9 @@ def pytest_collection_modifyitems(items):
 
 
 @pytest.fixture(scope="function", autouse=True)
-def case_skip(in_data):
+def case_skip(request, in_data):
     """处理跳过用例"""
-    in_data = TestCase(**in_data)
+    in_data = GetTestCase(**in_data)
     if ast.literal_eval(cache_regular(str(in_data.is_run))) is False:
         allure.dynamic.title(in_data.detail)
         allure_step_no(f"请求URL: {in_data.is_run}")
@@ -119,7 +118,19 @@ def case_skip(in_data):
         allure_step("请求数据: ", in_data.data)
         allure_step("依赖数据: ", in_data.dependence_case_data)
         allure_step("预期数据: ", in_data.assert_data)
-        pytest.skip()
+        pytest.skip(f"Test case {request.node.name} is skipped due to is_run being set to False.")
+    else:
+        # 检查依赖的用例是否有失败或被跳过的情况
+        dependency_marker = request.node.get_closest_marker("dependency")
+        if dependency_marker:
+            depends = dependency_marker.kwargs.get("depends")
+            for dep in depends:
+                dep_node = request.session.items.get(dep)
+                if dep_node:
+                    if dep_node.report_outcome == 'failed':
+                        pytest.skip(f"Test case {request.node.name} is skipped due to dependency {dep} failing.")
+                    elif dep_node.report_outcome == 'skipped':
+                        pytest.skip(f"Test case {request.node.name} is skipped due to dependency {dep} being skipped.")
 
 
 def pytest_terminal_summary():

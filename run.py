@@ -42,10 +42,14 @@ def run():
         # 不能存在相同case_id和相同文件名的用例，否则报错并exit
         TestCaseAutomaticGeneration().get_case_automatic()
 
-        # --alluredir=./report/tmp  生成Allure结果
-
-        pytest.main(['-s', '-W', 'ignore:Module already imported:pytest.PytestWarning',
-                        '--alluredir', './report/tmp', "--clean-alluredir"])
+        pytest.main([
+            '-s', 
+            '-W', 'ignore:Module already imported:pytest.PytestWarning',
+            '--alluredir', './report/tmp',  # 生成Allure结果文件
+            "--clean-alluredir",
+            '-n', 'auto',  # 使用所有可用的 CPU 核心 或自定义核心数
+            '--dist', 'loadscope'  # 按照依赖组分配测试用例
+        ])
 
         # 检查临时结果文件是否生成
         if os.path.exists('./report/tmp'):
@@ -118,8 +122,8 @@ def run():
 if __name__ == '__main__':
     try:
         """清空已自动生成的用例重新运行(无需要注释下面两行即可)"""
-        # directory = ensure_path_sep("\\test_case")
-        # del_directories(directory)
+        directory = ensure_path_sep("\\test_case")
+        del_directories(directory)
         run()
     except Exception as e:
         ERROR.log_exception("An exception occurred")

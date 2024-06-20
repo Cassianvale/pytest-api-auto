@@ -20,7 +20,7 @@ def write_case(case_path, page):
 
 
 def write_testcase_file(*, allure_epic, allure_feature, class_title,
-                        func_title, case_path, case_ids, file_name, allure_story):
+                        func_title, case_path, case_ids, file_name, allure_story, dependencies=None):
     """
     生成测试用例文件
 
@@ -32,11 +32,17 @@ def write_testcase_file(*, allure_epic, allure_feature, class_title,
     :param func_title: 函数名称
     :param case_path: 用例文件路径
     :param case_ids: 用例ID列表
+    :param dependencies: 依赖关系列表
     :return: None
     """
     conf_data = GetYamlData(ensure_path_sep("\\common\\config.yaml")).get_yaml_data()
     now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     real_time_update_test_cases = conf_data.get('real_time_update_test_cases', False)
+
+    dependency_marker = ""
+    if dependencies:
+        depends_list = [f'"{dep}"' for dep in dependencies]
+        dependency_marker = f"@pytest.mark.dependency(depends=[{', '.join(depends_list)}])\n    "
 
     page = f'''#!/usr/bin/env python
 # -*- coding: utf-8 -*-
@@ -59,7 +65,7 @@ re_data = regular(str(TestData))
 class Test{class_title}:
 
     @allure.story("{allure_story}")
-    @pytest.mark.parametrize('in_data', eval(re_data), ids=[i['detail'] for i in TestData])
+    {dependency_marker}@pytest.mark.parametrize('in_data', eval(re_data), ids=[i['detail'] for i in TestData])
     def test_{func_title}(self, in_data, case_skip):
 
         res = RequestControl(in_data).http_request()
@@ -80,3 +86,4 @@ if __name__ == '__main__':
         write_case(case_path=case_path, page=page)
     else:
         raise ValueNotFoundError("real_time_update_test_cases 配置不正确，只能配置 True 或者 False")
+    
