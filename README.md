@@ -4,6 +4,10 @@
 
 本仓库仅作二次开发库，具体使用请移步原作者仓库git地址: [https://gitee.com/yu_xiao_qi/pytest-auto-api2](https://gitee.com/yu_xiao_qi/pytest-auto-api2)
 
+dev分支特性(测试中):
+ `pytest-xdist` 和 `pytest-dependency` 自动标记依赖用例分布式执行
+ 
+
 **环境配置**  
 
 1. 配置环境Python 3.11  
