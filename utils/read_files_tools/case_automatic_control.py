@@ -128,7 +128,7 @@ class TestCaseAutomaticGeneration:
     def mk_dir(self):
         _case_dir_path = os.path.split(self.get_case_path)[0]
         os.makedirs(_case_dir_path, exist_ok=True)
-        INFO.logger.info(f"自动生成测试用例代码:{_case_dir_path}")
+        INFO.logger.info(f"自动生成测试用例代码: {self.get_case_path}")
 
     def get_case_automatic(self) -> None:
         """ 自动生成测试代码"""

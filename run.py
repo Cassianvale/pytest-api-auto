@@ -42,8 +42,6 @@ def run():
         # 不能存在相同case_id和相同文件名的用例，否则报错并exit
         TestCaseAutomaticGeneration().get_case_automatic()
 
-        # --alluredir=./report/tmp  生成Allure结果
-
         pytest.main(['-s', '-W', 'ignore:Module already imported:pytest.PytestWarning',
                         '--alluredir', './report/tmp', "--clean-alluredir"])
 

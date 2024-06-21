@@ -62,50 +62,40 @@ def clear_report():
 def pytest_configure(config):
     config.addinivalue_line("markers", 'smoke')
     config.addinivalue_line("markers", '回归测试')
-    config.addinivalue_line(
-        "markers", "dependency: mark test to be dependent on other tests"
-    )
 
 
 def pytest_collection_modifyitems(items):
     """
     测试用例收集完成时，将收集到的 item 的 name 和 node_id 的中文显示在控制台上
+    :return:
     """
-    dependencies = {}
-    standalone_items = []
-
     for item in items:
-        # 解码 item 的 name 和 nodeid
         item.name = item.name.encode("utf-8").decode("unicode_escape")
         item._nodeid = item.nodeid.encode("utf-8").decode("unicode_escape")
-        
-        dependency_marker = item.get_closest_marker("dependency")
-        if dependency_marker:
-            depends = dependency_marker.kwargs.get("depends")
-            if depends:
-                for dep in depends:
-                    if dep not in dependencies:
-                        dependencies[dep] = []
-                    dependencies[dep].append(item)
-            else:
-                if item.nodeid not in dependencies:
-                    dependencies[item.nodeid] = []
-        else:
-            standalone_items.append(item)
 
-    sorted_items = []
-    for dep, dep_items in dependencies.items():
-        if dep not in [i.nodeid for i in items]:
-            continue
-        dep_index = next(i for i, v in enumerate(items) if v.nodeid == dep)
-        sorted_items.append(items.pop(dep_index))
-        for dep_item in dep_items:
-            if dep_item in items:
-                sorted_items.append(items.pop(items.index(dep_item)))
+    # 期望用例顺序
+    collected_items_str = "\n".join([str(item) for item in items])
+    INFO.logger.info(f"收集到的测试用例:\n{collected_items_str}")
+    appoint_items = ["test_login", "test_get_user_info", "test_collect_addtool", "test_Cart_List", "test_ADD", "test_Guest_ADD",
+                     "test_Clear_Cart_Item"]
 
-    sorted_items.extend(standalone_items)
-    items[:] = sorted_items
+    # 指定运行顺序
+    run_items = []
+    for i in appoint_items:
+        for item in items:
+            module_item = item.name.split("[")[0]
+            if i == module_item:
+                run_items.append(item)
 
+    for i in run_items:
+        run_index = run_items.index(i)
+        items_index = items.index(i)
+
+        if run_index != items_index:
+            n_data = items[run_index]
+            run_index = items.index(n_data)
+            items[items_index], items[run_index] = items[run_index], items[items_index]
+            
 
 @pytest.fixture(scope="function", autouse=True)
 def case_skip(in_data):
