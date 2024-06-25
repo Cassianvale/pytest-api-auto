@@ -12,11 +12,10 @@ Jinja2
 mitmproxy
 openpyxl
 pandas
-pydantic
 PyMySQL
 pyparsing
 pyperclip
-pydantic==1.8.2
+pydantic==2.7.4
 PyYAML
 redis
 requests
