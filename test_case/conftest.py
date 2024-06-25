@@ -78,29 +78,26 @@ def pytest_collection_modifyitems(items):
     INFO.logger.info(f"收集到的测试用例:\n{collected_items_str}")
     appoint_items = ["test_login", "test_get_user_info", "test_collect_addtool", "test_Cart_List", "test_ADD", "test_Guest_ADD",
                      "test_Clear_Cart_Item"]
-
-    # 指定运行顺序
+    # 将items列表拆分成指定顺序项目及其他未指定顺序项目
     run_items = []
-    for i in appoint_items:
-        for item in items:
-            module_item = item.name.split("[")[0]
-            if i == module_item:
-                run_items.append(item)
+    other_items = []
+    for item in items:
+        module_item = item.name.split("[")[0]
+        if module_item in appoint_items:
+            run_items.append(item)
+        else:
+            other_items.append(item)
 
-    for i in run_items:
-        run_index = run_items.index(i)
-        items_index = items.index(i)
-
-        if run_index != items_index:
-            n_data = items[run_index]
-            run_index = items.index(n_data)
-            items[items_index], items[run_index] = items[run_index], items[items_index]
+    items[:] = run_items + other_items
             
-
+import json
 @pytest.fixture(scope="function", autouse=True)
 def case_skip(in_data):
     """处理跳过用例"""
+    # print("原始输入数据:")
+    # print(json.dumps(in_data, indent=4, ensure_ascii=False))
     in_data = TestCase(**in_data)
+    # 检测is_run条件
     if ast.literal_eval(cache_regular(str(in_data.is_run))) is False:
         allure.dynamic.title(in_data.detail)
         allure_step_no(f"请求URL: {in_data.is_run}")
@@ -134,3 +131,4 @@ def pytest_terminal_summary():
         INFO.logger.info(f"用例成功率: {_RATE:.2f} %")
     except ZeroDivisionError:
         INFO.logger.info("用例成功率: 0.00 %")
+        
