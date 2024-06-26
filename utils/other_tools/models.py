@@ -5,7 +5,7 @@ import types
 from enum import Enum, unique
 from typing import Text, Dict, Callable, Union, Optional, List, Any
 from dataclasses import dataclass
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 
 
 # =========================
@@ -134,6 +134,8 @@ class TestMetrics:
     pass_rate: float
     time: Text
 
+    def __str__(self):
+        return f"TestMetrics(passed={self.passed}, failed={self.failed}, broken={self.broken}, skipped={self.skipped}, total={self.total}, pass_rate={self.pass_rate}, time={self.time})"
 
 # =========================
 # 工具函数
@@ -270,7 +272,7 @@ class Config(BaseModel):
     env: Text
     tester_name: Text
     use_xdist: bool = False
-    notification_type: Text = '0'
+    notification_type: Union[Text, int, list] = '0'
     excel_report: bool
     ding_talk: Optional[DingTalk] = None
     mysql_db: Optional[MySqlDB] = None
@@ -281,3 +283,11 @@ class Config(BaseModel):
     real_time_update_test_cases: bool = False
     host: Text
     app_host: Optional[Text]
+
+    @validator('notification_type', pre=True, always=True)
+    def validate_notification_type(cls, v):
+        if isinstance(v, int):
+            return str(v)
+        if isinstance(v, str):
+            return v
+        raise ValueError("Invalid type for notification_type")

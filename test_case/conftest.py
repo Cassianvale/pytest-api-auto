@@ -77,35 +77,32 @@ def pytest_configure(config):
 def pytest_collection_modifyitems(config, items):
     if config.is_master:
 
-        if os.getenv('PYTEST_XDIST_WORKER', 'master') == 'master':
-            # 对item进行编码处理，确保中文字符正常显示
-            for item in items:
-                item.name = item.name.encode("utf-8").decode("unicode_escape")
-                item._nodeid = item.nodeid.encode("utf-8").decode("unicode_escape")
+        # 对item进行编码处理，确保中文字符正常显示
+        for item in items:
+            item.name = item.name.encode("utf-8").decode("unicode_escape")
+            item._nodeid = item.nodeid.encode("utf-8").decode("unicode_escape")
 
-            appoint_items = ["test_login", "test_get_user_info", "test_collect_addtool", "test_Cart_List", "test_ADD",
-                             "test_Guest_ADD",
-                             "test_Clear_Cart_Item"]
-            appoint_set = set(appoint_items)  # 使用集合加快查找速度
+        appoint_items = ["test_login", "test_get_user_info", "test_collect_addtool", "test_Cart_List", "test_ADD",
+                            "test_Guest_ADD","test_Clear_Cart_Item"]
+        
+        appoint_set = set(appoint_items)  # 使用集合加快查找速度
 
-            # 将items列表拆分成指定顺序项目及其他未指定顺序项目
-            run_items = []
-            other_items = []
-            for item in items:
-                module_item = item.name.split("[")[0]
-                if module_item in appoint_set:
-                    run_items.append(item)
-                else:
-                    other_items.append(item)
+        # 将items列表拆分成指定顺序项目及其他未指定顺序项目
+        run_items = []
+        other_items = []
+        for item in items:
+            module_item = item.name.split("[")[0]
+            if module_item in appoint_set:
+                run_items.append(item)
+            else:
+                other_items.append(item)
 
-            # 按指定顺序排序
-            sorted_run_items = sorted(run_items, key=lambda x: appoint_items.index(x.name.split("[")[0]))
+        sorted_run_items = sorted(run_items, key=lambda x: appoint_items.index(x.name.split("[")[0]))
 
-            # 合并排序后的列表
-            items[:] = sorted_run_items + other_items
+        items[:] = sorted_run_items + other_items
 
-            collected_items_str = "\n".join([str(item) for item in items])
-            logger.info(f"收集到的测试用例:\n{collected_items_str}")
+        collected_items_str = "\n".join([str(item) for item in items])
+        logger.info(f"收集到的测试用例:\n{collected_items_str}")
 
 
 @pytest.fixture(scope="function", autouse=True)
@@ -115,7 +112,6 @@ def case_skip(in_data):
     # print("原始输入数据:")
     # print(json.dumps(in_data, indent=4, ensure_ascii=False))
     in_data = TestCase(**in_data)
-    # 检测is_run条件
     if ast.literal_eval(cache_regular(str(in_data.is_run))) is False:
         allure.dynamic.title(in_data.detail)
         allure_step_no(f"请求URL: {in_data.is_run}")
@@ -127,7 +123,7 @@ def case_skip(in_data):
         pytest.skip()
 
 
-def pytest_terminal_summary(config):
+def pytest_terminal_summary(config, terminalreporter):
     if config.is_master:
         allure_data = AllureFileClean.get_case_count()
 
@@ -137,16 +133,24 @@ def pytest_terminal_summary(config):
         _SKIPPED = allure_data.skipped
         _TOTAL = allure_data.total
         allure_time = allure_data.time
+        pytest_time = round(time.time() - terminalreporter._sessionstarttime, 2)
 
         logger.info(f"总用例数: {_TOTAL}")
         logger.info(f"通过用例数: {_PASSED}")
         logger.error(f"异常用例数: {_BROKEN}")
         logger.error(f"失败用例数: {_FAILED}")
         logger.warning(f"跳过用例数: {_SKIPPED}")
-        logger.info(f"pytest 用例执行总时长: {allure_time} s")
 
         try:
             _RATE = _PASSED / _TOTAL * 100
             logger.info(f"用例成功率: {_RATE:.2f} %")
         except ZeroDivisionError:
             logger.info("用例成功率: 0.00 %")
+            
+        logger.info(f"allure 报告测试时间: {allure_time} s")
+
+        logger.info(f"pytest 测试会话时长: {pytest_time} s")
+
+
+if __name__ == '__main__':
+    pytest.main(['-s', '-v', 'test_case\\conftest.py'])

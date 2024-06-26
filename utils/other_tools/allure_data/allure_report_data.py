@@ -49,29 +49,44 @@ class AllureFileClean:
                 values += "        " + i[0] + ":" + i[1] + "\n"
         return values
 
-    @classmethod
-    def get_case_count(cls) -> 'TestMetrics':
-        """ 统计用例数量 return的是字典"""
-        try:
-            project_root = ensure_path_sep(".")
-            html_report_path = ensure_path_sep("\\report\\html")
-            if not os.path.exists(html_report_path):
-                logger.info("HTML目录不存在，生成Allure报告...")
-                cmd = "allure generate ./report/tmp -o ./report/html --clean"
-                result = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=project_root)
-                if result.returncode != 0:
-                    logger.error(f"生成Allure报告失败: {result.stderr}")
-                    raise RuntimeError("生成Allure报告失败，请检查Allure环境配置")
-                else:
-                    logger.info("Allure报告生成成功")
+    _cached_case_count = None
 
-            file_name = ensure_path_sep("\\report\\html\\widgets\\summary.json")
-            if os.path.exists(file_name):
-                with open(file_name, 'r', encoding='utf-8') as file:
+    @classmethod
+    def generate_allure_report(cls) -> None:
+        """生成Allure报告"""
+        if not cls._cached_case_count:
+            project_root = ensure_path_sep(".")
+            logger.info("生成最新Allure报告...")
+            cmd = "allure generate ./report/tmp -o ./report/html --clean"
+            result = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=project_root)
+            if result.returncode != 0:
+                logger.error(f"生成Allure报告失败: {result.stderr}")
+                raise RuntimeError("生成Allure报告失败，请检查Allure环境配置")
+            else:
+                logger.info("Allure报告生成成功")
+
+    @classmethod
+    def get_case_count(cls) -> TestMetrics:
+        """ 统计用例数量 return的是字典"""
+        if cls._cached_case_count:
+            return cls._cached_case_count
+
+        try:
+            html_report_path = ensure_path_sep("\\report\\html")
+            tmp_report_path = ensure_path_sep("\\report\\tmp")
+            summary_file_path = ensure_path_sep("\\report\\html\\widgets\\summary.json")
+
+            if not os.path.exists(html_report_path) or os.path.exists(tmp_report_path):
+                cls.generate_allure_report()
+            else:
+                logger.error("HTML目录已存在，TMP目录不存在，请生成TMP目录...")
+
+            if os.path.exists(summary_file_path):
+                with open(summary_file_path, 'r', encoding='utf-8') as file:
                     data = json.load(file)
             else:
-                logger.error(f"文件 ./report/html/widgets/summary.json 不存在")
-                raise FileNotFoundError(f"文件 ./report/html/widgets/summary.json 不存在")
+                logger.error(f"文件 {summary_file_path} 不存在")
+                raise FileNotFoundError(f"文件 {summary_file_path} 不存在")
 
             _case_count = data['statistic']
             _time = data['time']
@@ -90,7 +105,8 @@ class AllureFileClean:
 
             # 收集用例运行时长
             run_case_data['time'] = _time if run_case_data['total'] == 0 else round(_time['duration'] / 1000, 2)
-            return TestMetrics(**run_case_data)
+            cls._cached_case_count = TestMetrics(**run_case_data)
+            return cls._cached_case_count
 
         except FileNotFoundError as exc:
             raise FileNotFoundError(

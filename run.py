@@ -89,7 +89,7 @@ def serve_allure_report():
 
 def handle_exception(e):
     err = traceback.format_exc()
-    send_email = SendEmail(AllureFileClean.get_case_count())
+    send_email = SendEmail(AllureFileClean().get_case_count())
     send_email.error_mail(err)
     raise e
 
@@ -105,10 +105,9 @@ def run():
         clear_test_case()  # 运行前清空已生成的测试用例
         generate_test_cases()  # 自动生成测试用例
         run_pytest()
-        allure_data = AllureFileClean().get_case_count()
-        send_notifications(allure_data)  # 发送通知
+        send_notifications(AllureFileClean().get_case_count())  # 发送通知
         write_error_case_excel()  # 写入异常用例excel
-        serve_allure_report()   # 自动打开 Allure 报告
+        # serve_allure_report()   # 自动打开 Allure 报告
     except Exception as e:
         handle_exception(e)
 
