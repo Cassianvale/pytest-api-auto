@@ -23,7 +23,6 @@ class GetYamlData:
         else:
             raise FileNotFoundError(f"文件路径不存在")
 
-
     def write_yaml_data(self, key: str, value) -> int:
         """
         更改 yaml 文件中的值, 并且保留注释内容

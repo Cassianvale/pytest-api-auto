@@ -1,6 +1,5 @@
 # requirements.txt
 
-allure-pytest==2.13.5
 loguru==0.7.2
 cryptography==42.0.8
 DingtalkChatbot==1.5.7
@@ -10,7 +9,9 @@ mitmproxy==10.3.1
 openpyxl==3.1.4
 pandas==2.2.2
 pytest==8.2.2
+allure-pytest==2.13.5
 pytest-xdist==3.6.1
+pytest-dependency==0.6.0
 PyMySQL==1.1.1
 pyparsing==3.1.2
 pyperclip==1.8.2

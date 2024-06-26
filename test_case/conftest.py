@@ -6,6 +6,7 @@ import time
 import allure
 import requests
 import ast
+import os
 from common.setting import ensure_path_sep
 from utils.requests_tool.request_control import cache_regular
 from utils.logging_tool.log_control import logger
@@ -64,39 +65,48 @@ def pytest_configure(config):
     config.addinivalue_line("markers", '回归测试')
 
 
-def pytest_collection_modifyitems(items):
-    """
-    测试用例收集完成时，将收集到的 item 的 name 和 node_id 的中文显示在控制台上
-    :return:
-    """
-    for item in items:
-        item.name = item.name.encode("utf-8").decode("unicode_escape")
-        item._nodeid = item.nodeid.encode("utf-8").decode("unicode_escape")
+def pytest_configure(config):
+    if not hasattr(config, 'workerinput'):
+        # This is the main process
+        config.is_master = True
+    else:
+        # This is a worker process
+        config.is_master = False
 
-    # 记录收集到的测试用例
-    collected_items_str = "\n".join([str(item) for item in items])
-    logger.info(f"收集到的测试用例:\n{collected_items_str}")
 
-    appoint_items = ["test_login", "test_get_user_info", "test_collect_addtool", "test_Cart_List", "test_ADD", "test_Guest_ADD",
-                     "test_Clear_Cart_Item"]
-    appoint_set = set(appoint_items)  # 使用集合加快查找速度
+def pytest_collection_modifyitems(config, items):
+    if config.is_master:
 
-    # 将items列表拆分成指定顺序项目及其他未指定顺序项目
-    run_items = []
-    other_items = []
-    for item in items:
-        module_item = item.name.split("[")[0]
-        if module_item in appoint_set:
-            run_items.append(item)
-        else:
-            other_items.append(item)
+        if os.getenv('PYTEST_XDIST_WORKER', 'master') == 'master':
+            # 对item进行编码处理，确保中文字符正常显示
+            for item in items:
+                item.name = item.name.encode("utf-8").decode("unicode_escape")
+                item._nodeid = item.nodeid.encode("utf-8").decode("unicode_escape")
 
-    # 按指定顺序排序
-    sorted_run_items = sorted(run_items, key=lambda x: appoint_items.index(x.name.split("[")[0]))
+            appoint_items = ["test_login", "test_get_user_info", "test_collect_addtool", "test_Cart_List", "test_ADD",
+                             "test_Guest_ADD",
+                             "test_Clear_Cart_Item"]
+            appoint_set = set(appoint_items)  # 使用集合加快查找速度
 
-    # 合并排序后的列表
-    items[:] = sorted_run_items + other_items
-            
+            # 将items列表拆分成指定顺序项目及其他未指定顺序项目
+            run_items = []
+            other_items = []
+            for item in items:
+                module_item = item.name.split("[")[0]
+                if module_item in appoint_set:
+                    run_items.append(item)
+                else:
+                    other_items.append(item)
+
+            # 按指定顺序排序
+            sorted_run_items = sorted(run_items, key=lambda x: appoint_items.index(x.name.split("[")[0]))
+
+            # 合并排序后的列表
+            items[:] = sorted_run_items + other_items
+
+            collected_items_str = "\n".join([str(item) for item in items])
+            logger.info(f"收集到的测试用例:\n{collected_items_str}")
+
 
 @pytest.fixture(scope="function", autouse=True)
 def case_skip(in_data):
@@ -117,26 +127,26 @@ def case_skip(in_data):
         pytest.skip()
 
 
-def pytest_terminal_summary():
-    allure_data = AllureFileClean.get_case_count()
+def pytest_terminal_summary(config):
+    if config.is_master:
+        allure_data = AllureFileClean.get_case_count()
 
-    _PASSED = allure_data.get('passed', 0)
-    _BROKEN = allure_data.get('broken', 0)
-    _FAILED = allure_data.get('failed', 0)
-    _SKIPPED = allure_data.get('skipped', 0)
-    _TOTAL = allure_data.get('total', 0)
-    allure_time = allure_data.get('time', 0)
+        _PASSED = allure_data.passed
+        _BROKEN = allure_data.broken
+        _FAILED = allure_data.failed
+        _SKIPPED = allure_data.skipped
+        _TOTAL = allure_data.total
+        allure_time = allure_data.time
 
-    logger.info(f"总用例数: {_TOTAL}")
-    logger.info(f"通过用例数: {_PASSED}")
-    logger.error(f"异常用例数: {_BROKEN}")
-    logger.error(f"失败用例数: {_FAILED}")
-    logger.warning(f"跳过用例数: {_SKIPPED}")
-    logger.info(f"pytest 用例执行总时长: {allure_time} s")
+        logger.info(f"总用例数: {_TOTAL}")
+        logger.info(f"通过用例数: {_PASSED}")
+        logger.error(f"异常用例数: {_BROKEN}")
+        logger.error(f"失败用例数: {_FAILED}")
+        logger.warning(f"跳过用例数: {_SKIPPED}")
+        logger.info(f"pytest 用例执行总时长: {allure_time} s")
 
-    try:
-        _RATE = _PASSED / _TOTAL * 100
-        logger.info(f"用例成功率: {_RATE:.2f} %")
-    except ZeroDivisionError:
-        logger.info("用例成功率: 0.00 %")
-        
+        try:
+            _RATE = _PASSED / _TOTAL * 100
+            logger.info(f"用例成功率: {_RATE:.2f} %")
+        except ZeroDivisionError:
+            logger.info("用例成功率: 0.00 %")

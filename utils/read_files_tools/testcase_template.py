@@ -7,10 +7,8 @@ describe: 用例模板
 
 import datetime
 import os
-from utils.read_files_tools.yaml_control import GetYamlData
-from common.setting import ensure_path_sep
+from utils import config
 from utils.other_tools.exceptions import ValueNotFoundError
-from utils.read_files_tools.regular_control import cache_regular
 
 
 def write_case(case_path, page):
@@ -34,10 +32,7 @@ def write_testcase_file(*, allure_epic, allure_feature, class_title,
     :param case_ids: 用例ID列表
     :return: None
     """
-    conf_data = GetYamlData(ensure_path_sep("\\common\\config.yaml")).get_yaml_data()
     now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    real_time_update_test_cases = conf_data.get('real_time_update_test_cases', False)
-
     page = f'''#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # @Time   : {now}
@@ -53,6 +48,7 @@ from utils.requests_tool.teardown_control import TearDownHandler
 case_id = {case_ids}
 TestData = GetTestCase.case_data(case_id)
 re_data = regular(str(TestData))
+
 
 @allure.epic("{allure_epic}")
 @allure.feature("{allure_feature}")
@@ -74,7 +70,7 @@ if __name__ == '__main__':
     pytest.main(['{file_name}', '-s', '-W', 'ignore:Module already imported:pytest.PytestWarning'])
 '''
 
-    if real_time_update_test_cases:
+    if config.real_time_update_test_cases:
         write_case(case_path=case_path, page=page)
     elif not os.path.exists(case_path):
         write_case(case_path=case_path, page=page)

@@ -7,7 +7,8 @@
 """
 import requests
 from utils.logging_tool.log_control import logger
-from utils.other_tools.allure_data.allure_report_data import TestMetrics, AllureFileClean
+from utils.other_tools.models import TestMetrics
+from utils.other_tools.allure_data.allure_report_data import AllureFileClean
 from utils.times_tool.time_control import now_time
 from utils.other_tools.get_local_ip import get_host_ip
 from utils.other_tools.exceptions import SendMessageError, ValueTypeError

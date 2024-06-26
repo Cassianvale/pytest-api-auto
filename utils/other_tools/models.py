@@ -269,6 +269,7 @@ class Config(BaseModel):
     project_name: Text
     env: Text
     tester_name: Text
+    use_xdist: bool = False
     notification_type: Text = '0'
     excel_report: bool
     ding_talk: Optional[DingTalk] = None

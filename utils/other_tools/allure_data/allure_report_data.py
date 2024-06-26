@@ -5,11 +5,14 @@
 收集 allure 报告
 """
 
+import os
 import json
+import subprocess
 from typing import List, Text
 from common.setting import ensure_path_sep
-from utils.read_files_tools.get_all_files_path import get_all_files
+from utils.logging_tool.log_control import logger
 from utils.other_tools.models import TestMetrics
+from utils.read_files_tools.get_all_files_path import get_all_files
 
 
 class AllureFileClean:
@@ -47,27 +50,48 @@ class AllureFileClean:
         return values
 
     @classmethod
-    def get_case_count(cls):
+    def get_case_count(cls) -> 'TestMetrics':
         """ 统计用例数量 return的是字典"""
         try:
+            project_root = ensure_path_sep(".")
+            html_report_path = ensure_path_sep("\\report\\html")
+            if not os.path.exists(html_report_path):
+                logger.info("HTML目录不存在，生成Allure报告...")
+                cmd = "allure generate ./report/tmp -o ./report/html --clean"
+                result = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=project_root)
+                if result.returncode != 0:
+                    logger.error(f"生成Allure报告失败: {result.stderr}")
+                    raise RuntimeError("生成Allure报告失败，请检查Allure环境配置")
+                else:
+                    logger.info("Allure报告生成成功")
+
             file_name = ensure_path_sep("\\report\\html\\widgets\\summary.json")
-            with open(file_name, 'r', encoding='utf-8') as file:
-                data = json.load(file)
+            if os.path.exists(file_name):
+                with open(file_name, 'r', encoding='utf-8') as file:
+                    data = json.load(file)
+            else:
+                logger.error(f"文件 ./report/html/widgets/summary.json 不存在")
+                raise FileNotFoundError(f"文件 ./report/html/widgets/summary.json 不存在")
+
             _case_count = data['statistic']
             _time = data['time']
             keep_keys = {"passed", "failed", "broken", "skipped", "total"}
             run_case_data = {k: v for k, v in _case_count.items() if k in keep_keys}
+
             # 判断运行用例总数大于0
             if _case_count["total"] > 0:
-                # 计算用例成功率
-                run_case_data["pass_rate"] = round(
-                    (_case_count["passed"] + _case_count["skipped"]) / _case_count["total"] * 100, 2)
+                # 确保计算通过率时使用浮点数
+                passed_and_skipped = _case_count["passed"] + _case_count["skipped"]
+                total = _case_count["total"]
+                run_case_data["pass_rate"] = round((passed_and_skipped / total) * 100, 2)
             else:
                 # 如果未运行用例，则成功率为 0.0
                 run_case_data["pass_rate"] = 0.0
+
             # 收集用例运行时长
             run_case_data['time'] = _time if run_case_data['total'] == 0 else round(_time['duration'] / 1000, 2)
-            return run_case_data
+            return TestMetrics(**run_case_data)
+
         except FileNotFoundError as exc:
             raise FileNotFoundError(
                 "程序中检查到您未生成allure报告，"
@@ -75,6 +99,10 @@ class AllureFileClean:
                 "详情可查看如下博客内容："
                 "https://blog.csdn.net/weixin_43865008/article/details/124332793"
             ) from exc
+
+        except Exception as e:
+            logger.error(f"处理Allure数据时出错: {e}")
+            raise
 
 
 if __name__ == '__main__':
