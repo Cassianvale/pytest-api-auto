@@ -11,7 +11,7 @@ from utils.requests_tool.request_control import RequestControl
 from utils.read_files_tools.regular_control import cache_regular, sql_regular, regular
 from utils.other_tools.jsonpath_date_replace import jsonpath_replace
 from utils.mysql_tool.mysql_control import MysqlDB
-from utils.logging_tool.log_control import WARNING
+from utils.logging_tool.log_control import logger
 from utils.other_tools.models import ResponseData, TearDown, SendRequest, ParamPrepare
 from utils.other_tools.exceptions import JsonpathExtractionFailed, ValueNotFoundError
 from utils.cache_process.cache_control import CacheHandler
@@ -311,4 +311,4 @@ class TearDownHandler:
                     _sql_data = sql_regular(value=i, res=json.loads(_response_data))
                     MysqlDB().execute(cache_regular(_sql_data))
                 else:
-                    WARNING.logger.warning("程序中检查到您数据库开关为关闭状态，已为您跳过删除sql: %s", i)
+                    logger.warning("程序中检查到您数据库开关为关闭状态，已为您跳过删除sql: %s", i)

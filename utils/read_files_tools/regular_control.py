@@ -8,10 +8,12 @@ import random
 from datetime import date, timedelta, datetime
 from jsonpath import jsonpath
 from faker import Faker
-from utils.logging_tool.log_control import ERROR
+from utils.logging_tool.log_control import logger
+
 
 class Context:
     """ 正则替换 """
+
     def __init__(self):
         self.faker = Faker(locale='zh_CN')
 
@@ -25,7 +27,7 @@ class Context:
         return "shuchu2"
 
     @classmethod
-    def Ctest03(cls,index,index2):
+    def Ctest03(cls, index, index2):
         if index == 0 and index2 == 0:
             return "shuchu3"
         else:
@@ -210,21 +212,20 @@ def regular(target):
         return target
 
     except AttributeError:
-        ERROR.logger.error("未找到对应的替换的数据, 请检查数据是否正确 %s", target)
+        logger.error("未找到对应的替换的数据, 请检查数据是否正确 %s", target)
         raise
     except IndexError:
-        ERROR.logger.error("yaml中的 ${{}} 函数方法不正确，正确语法实例：${{get_time()}}")
+        logger.error("yaml中的 ${{}} 函数方法不正确，正确语法实例：${{get_time()}}")
         raise
 
 
 if __name__ == '__main__':
-    
-    e = "${{Ctest01(0)}}"   # None
-    a = "${{Ctest02()}}"    # shuchu2
-    b = "${{Ctest03(0,1)}}" # 啥也没有
-    d = "${{host()}} aaa"   # http://127.0.0.1:8000 aaa
+    e = "${{Ctest01(0)}}"  # None
+    a = "${{Ctest02()}}"  # shuchu2
+    b = "${{Ctest03(0,1)}}"  # 啥也没有
+    d = "${{host()}} aaa"  # http://127.0.0.1:8000 aaa
     E = regular(e)
     A = regular(a)
     B = regular(b)
     D = regular(d)
-    print(E,A,B,D)
+    print(E, A, B, D)

@@ -11,14 +11,14 @@ from common.setting import ensure_path_sep
 from utils import config
 from utils.read_files_tools.case_automatic_control import TestCaseAutomaticGeneration
 from utils.other_tools.models import NotificationType
-from utils.logging_tool.log_control import INFO
+from utils.logging_tool.log_control import logger
 from utils.notify.wechat_send import WeChatSend
 from utils.notify.ding_talk import DingTalkSendMsg
 from utils.notify.send_mail import SendEmail
 from utils.notify.lark import FeiShuTalkChatBot
 from utils.other_tools.allure_data.error_case_excel import ErrorCaseExcel
 from utils.other_tools.allure_data.allure_report_data import AllureFileClean, TestMetrics
-from utils.logging_tool.log_control import ERROR
+from utils.logging_tool.log_control import logger
 from utils.read_files_tools.clean_case import del_directories
 
 
@@ -26,7 +26,7 @@ def run():
 
     # 从配置文件中获取项目名称
     try:
-        INFO.logger.info(
+        logger.info(
             """
                              _    _         _      _____         _
               __ _ _ __ (_)  / \\  _   _| |_ __|_   _|__  ___| |_
@@ -42,8 +42,23 @@ def run():
         # 不能存在相同case_id和相同文件名的用例，否则报错并exit
         TestCaseAutomaticGeneration().get_case_automatic()
 
-        pytest.main(['-s', '-W', 'ignore:Module already imported:pytest.PytestWarning',
-                        '--alluredir', './report/tmp', "--clean-alluredir"])
+        """正常运行"""
+        pytest.main([
+            '-s',  # 实时输出
+            '-W', 'ignore:Module already imported:pytest.PytestWarning',  # 忽略特定警告
+            '--alluredir', './report/tmp',  # 指定Allure报告目录
+            '--clean-alluredir'  # 清理Allure报告目录
+        ])
+
+        """xdist分布式运行"""
+        # pytest.main([
+        #     '-s',  # 实时输出
+        #     '-W', 'ignore:Module already imported:pytest.PytestWarning',  # 忽略特定警告
+        #     '--alluredir', './report/tmp',  # 指定Allure报告目录
+        #     '--clean-alluredir',  # 清理Allure报告目录
+        #     '-n', 'auto',  # 使用pytest-xdist进行并行运行
+        #     '--dist', 'loadscope',  # 按测试模块（或类）顺序执行
+        # ])
 
         # 检查临时结果文件是否生成
         if os.path.exists('./report/tmp'):
@@ -120,5 +135,5 @@ if __name__ == '__main__':
         # del_directories(directory)
         run()
     except Exception as e:
-        ERROR.log_exception("An exception occurred")
+        logger.exception("An exception occurred")
 

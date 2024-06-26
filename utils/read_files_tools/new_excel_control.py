@@ -6,7 +6,7 @@
 import json
 import pandas as pd
 from common.setting import ensure_path_sep
-from utils.logging_tool.log_control import INFO, ERROR
+from utils.logging_tool.log_control import logger
 from typing import Union
 
 excel_path = ensure_path_sep("\\Files\\test_data\\test.xlsx")
@@ -51,10 +51,10 @@ def get_excel_data(sheet: str, case_name: Union[str, int], request_data_row: int
                     # 如果用户确认，再次调用函数进行查询
                     return get_excel_data(sheet, fuzzy_matches[int(answer) - 1], request_data_row, response_data_row)
             else:
-                ERROR.logger.error(f"未找到与 `{case_name}` 匹配的用例名称！")
+                logger.error(f"未找到与 `{case_name}` 匹配的用例名称！")
                 return None
         else:
-            INFO.logger.info(
+            logger.info(
                 "获取 {0} 表 \n "
                 "📝 Case name: {1} \n "
                 "🚀 Request body: {2} \n "
@@ -64,7 +64,7 @@ def get_excel_data(sheet: str, case_name: Union[str, int], request_data_row: int
             return res_list
 
     except ValueError as e:
-        ERROR.logger.error(f"出现错误：{str(e)}, 请检查 `sheet` 参数值是否存在！")
+        logger.error(f"出现错误：{str(e)}, 请检查 `sheet` 参数值是否存在！")
         return None
 
 

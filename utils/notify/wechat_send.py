@@ -6,7 +6,7 @@
 发送企业微信通知
 """
 import requests
-from utils.logging_tool.log_control import ERROR
+from utils.logging_tool.log_control import logger
 from utils.other_tools.allure_data.allure_report_data import TestMetrics, AllureFileClean
 from utils.times_tool.time_control import now_time
 from utils.other_tools.get_local_ip import get_host_ip
@@ -40,7 +40,7 @@ class WeChatSend:
                     if isinstance(i, str):
                         res = requests.post(url=config.wechat.webhook, json=_data, headers=self.headers)
                         if res.json()['errcode'] != 0:
-                            ERROR.logger.error(res.json())
+                            logger.error(res.json())
                             raise SendMessageError("企业微信「文本类型」消息发送失败")
 
                     else:
@@ -57,7 +57,7 @@ class WeChatSend:
         _data = {"msgtype": "markdown", "markdown": {"content": content}}
         res = requests.post(url=config.wechat.webhook, json=_data, headers=self.headers)
         if res.json()['errcode'] != 0:
-            ERROR.logger.error(res.json())
+            logger.error(res.json())
             raise SendMessageError("企业微信「MarkDown类型」消息发送失败")
 
     def _upload_file(self, file):
@@ -79,7 +79,7 @@ class WeChatSend:
         _data = {"msgtype": "file", "file": {"media_id": self._upload_file(file)}}
         res = requests.post(url=config.wechat.webhook, json=_data, headers=self.headers)
         if res.json()['errcode'] != 0:
-            ERROR.logger.error(res.json())
+            logger.error(res.json())
             raise SendMessageError("企业微信「file类型」消息发送失败")
 
     def send_wechat_notification(self):

@@ -7,7 +7,7 @@ from utils.requests_tool.request_control import RequestControl
 from utils.mysql_tool.mysql_control import SetUpMySQL
 from utils.read_files_tools.regular_control import regular, cache_regular
 from utils.other_tools.jsonpath_date_replace import jsonpath_replace
-from utils.logging_tool.log_control import WARNING
+from utils.logging_tool.log_control import logger
 from utils.other_tools.models import DependentType
 from utils.other_tools.models import TestCase, DependentCaseData, DependentData
 from utils.other_tools.exceptions import ValueNotFoundError
@@ -128,7 +128,7 @@ class DependentCase:
                             jsonpath_data=jsonpath_data,
                         )
             else:
-                WARNING.logger.warning("检查到数据库开关为 [关闭] 状态，请确认配置")
+                logger.warning("检查到数据库开关为 [关闭] 状态，请确认配置")
 
     def dependent_handler(
             self,

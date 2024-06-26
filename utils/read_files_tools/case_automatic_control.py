@@ -11,7 +11,7 @@ from utils.read_files_tools.testcase_template import write_testcase_file
 from utils.read_files_tools.yaml_control import GetYamlData
 from utils.read_files_tools.get_all_files_path import get_all_files
 from utils.other_tools.exceptions import ValueNotFoundError
-from utils.logging_tool.log_control import INFO
+from utils.logging_tool.log_control import logger
 
 
 class TestCaseAutomaticGeneration:
@@ -128,7 +128,7 @@ class TestCaseAutomaticGeneration:
     def mk_dir(self):
         _case_dir_path = os.path.split(self.get_case_path)[0]
         os.makedirs(_case_dir_path, exist_ok=True)
-        INFO.logger.info(f"自动生成测试用例代码: {self.get_case_path}")
+        logger.info(f"自动生成测试用例代码: {self.get_case_path}")
 
     def get_case_automatic(self) -> None:
         """ 自动生成测试代码"""

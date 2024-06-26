@@ -8,7 +8,7 @@ import requests
 import ast
 from common.setting import ensure_path_sep
 from utils.requests_tool.request_control import cache_regular
-from utils.logging_tool.log_control import INFO, ERROR, WARNING
+from utils.logging_tool.log_control import logger
 from utils.other_tools.models import TestCase
 from utils.read_files_tools.clean_files import del_file
 from utils.other_tools.allure_data.allure_tools import allure_step, allure_step_no
@@ -73,27 +73,35 @@ def pytest_collection_modifyitems(items):
         item.name = item.name.encode("utf-8").decode("unicode_escape")
         item._nodeid = item.nodeid.encode("utf-8").decode("unicode_escape")
 
-    # 期望用例顺序
+    # 记录收集到的测试用例
     collected_items_str = "\n".join([str(item) for item in items])
-    INFO.logger.info(f"收集到的测试用例:\n{collected_items_str}")
+    logger.info(f"收集到的测试用例:\n{collected_items_str}")
+
     appoint_items = ["test_login", "test_get_user_info", "test_collect_addtool", "test_Cart_List", "test_ADD", "test_Guest_ADD",
                      "test_Clear_Cart_Item"]
+    appoint_set = set(appoint_items)  # 使用集合加快查找速度
+
     # 将items列表拆分成指定顺序项目及其他未指定顺序项目
     run_items = []
     other_items = []
     for item in items:
         module_item = item.name.split("[")[0]
-        if module_item in appoint_items:
+        if module_item in appoint_set:
             run_items.append(item)
         else:
             other_items.append(item)
 
-    items[:] = run_items + other_items
+    # 按指定顺序排序
+    sorted_run_items = sorted(run_items, key=lambda x: appoint_items.index(x.name.split("[")[0]))
+
+    # 合并排序后的列表
+    items[:] = sorted_run_items + other_items
             
-import json
+
 @pytest.fixture(scope="function", autouse=True)
 def case_skip(in_data):
     """处理跳过用例"""
+    # import json
     # print("原始输入数据:")
     # print(json.dumps(in_data, indent=4, ensure_ascii=False))
     in_data = TestCase(**in_data)
@@ -119,16 +127,16 @@ def pytest_terminal_summary():
     _TOTAL = allure_data.get('total', 0)
     allure_time = allure_data.get('time', 0)
 
-    INFO.logger.info(f"总用例数: {_TOTAL}")
-    INFO.logger.info(f"通过用例数: {_PASSED}")
-    ERROR.logger.error(f"异常用例数: {_BROKEN}")
-    ERROR.logger.error(f"失败用例数: {_FAILED}")
-    WARNING.logger.warning(f"跳过用例数: {_SKIPPED}")
-    INFO.logger.info(f"pytest 用例执行总时长: {allure_time} s")
+    logger.info(f"总用例数: {_TOTAL}")
+    logger.info(f"通过用例数: {_PASSED}")
+    logger.error(f"异常用例数: {_BROKEN}")
+    logger.error(f"失败用例数: {_FAILED}")
+    logger.warning(f"跳过用例数: {_SKIPPED}")
+    logger.info(f"pytest 用例执行总时长: {allure_time} s")
 
     try:
         _RATE = _PASSED / _TOTAL * 100
-        INFO.logger.info(f"用例成功率: {_RATE:.2f} %")
+        logger.info(f"用例成功率: {_RATE:.2f} %")
     except ZeroDivisionError:
-        INFO.logger.info("用例成功率: 0.00 %")
+        logger.info("用例成功率: 0.00 %")
         

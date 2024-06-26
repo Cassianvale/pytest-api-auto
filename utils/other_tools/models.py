@@ -97,6 +97,7 @@ class AssertMethod(Enum):
     startswith = 'startswith'
     endswith = 'endswith'
 
+
 @unique
 class TestCaseEnum(Enum):
     URL = ("url", True)
@@ -116,8 +117,8 @@ class TestCaseEnum(Enum):
     TEARDOWN = ("teardown", False)
     TEARDOWN_SQL = ("teardown_sql", False)
     SLEEP = ("sleep", False)
-    
-    
+
+
 # =========================
 # 数据类
 # =========================

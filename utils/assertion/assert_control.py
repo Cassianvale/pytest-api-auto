@@ -9,7 +9,7 @@ import json
 from typing import Text, Dict, Any, Union
 from jsonpath import jsonpath
 from utils.other_tools.models import AssertMethod
-from utils.logging_tool.log_control import ERROR, WARNING
+from utils.logging_tool.log_control import logger
 from utils.read_files_tools.regular_control import cache_regular
 from utils.other_tools.models import load_module_functions
 from utils.assertion import assert_type
@@ -115,7 +115,7 @@ class AssertUtil:
         :return:
         """
         if self.sql_switch is False:
-            WARNING.logger.warning(
+            logger.warning(
                 "检测到数据库状态为关闭状态，程序已为您跳过此断言，断言值:%s" % self.get_assert_data
             )
         return self.sql_switch

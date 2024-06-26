@@ -8,7 +8,7 @@ from common.setting import ensure_path_sep, get_relative_path, root_path
 from utils.read_files_tools.get_yaml_data_analysis import CaseData
 from utils.read_files_tools.get_all_files_path import get_all_files
 from utils.cache_process.cache_control import CacheHandler, _cache_config
-from utils.logging_tool.log_control import ERROR
+from utils.logging_tool.log_control import logger
 
 
 def check_duplicate(file_map, key, current_path):
@@ -45,5 +45,5 @@ def write_case_process():
 try:
     write_case_process()
 except ValueError as e:
-    ERROR.logger.error(f"ValueError occurred: {e}")
+    logger.error(f"ValueError occurred: {e}")
     sys.exit(1)

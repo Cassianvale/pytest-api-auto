@@ -7,7 +7,7 @@
 import os
 from common.setting import ensure_path_sep
 import chardet
-from utils.logging_tool.log_control import INFO
+from utils.logging_tool.log_control import logger
 from utils import config
 
 os.system("pip3 install chardet")
@@ -75,10 +75,10 @@ class InstallRequirements:
         read_version_library_comparisons_txt = self.read_version_library_comparisons_txt()
         read_requirements = self.read_requirements()
         if read_version_library_comparisons_txt == read_requirements:
-            INFO.logger.info("程序中未检查到更新版本库，已为您跳过自动安装库")
+            logger.info("程序中未检查到更新版本库，已为您跳过自动安装库")
         # 程序中如出现不同的文件，则安装
         else:
-            INFO.logger.info("程序中检测到您更新了依赖库，已为您自动安装")
+            logger.info("程序中检测到您更新了依赖库，已为您自动安装")
             os.system(f"pip3 install -r {self.requirements_path}")
             with open(self.version_library_comparisons_path, "w",
                       encoding=self.check_charset(self.requirements_path)) as file:

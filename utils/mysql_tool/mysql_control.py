@@ -12,7 +12,7 @@ from warnings import filterwarnings
 import pymysql
 from typing import List, Union, Text, Dict
 from utils import config
-from utils.logging_tool.log_control import ERROR
+from utils.logging_tool.log_control import logger
 from utils.read_files_tools.regular_control import sql_regular
 from utils.read_files_tools.regular_control import cache_regular
 from utils.other_tools.exceptions import DataAcquisitionFailed, ValueTypeError
@@ -39,7 +39,7 @@ class MysqlDB:
                 # 使用 cursor 方法获取操作游标，得到一个可以执行sql语句，并且操作结果为字典返回的游标
                 self.cur = self.conn.cursor(cursor=pymysql.cursors.DictCursor)
             except AttributeError as error:
-                ERROR.logger.error("数据库连接失败，失败原因 %s", error)
+                logger.error("数据库连接失败，失败原因 %s", error)
 
         def __del__(self):
             try:
@@ -48,7 +48,7 @@ class MysqlDB:
                 # 关闭连接
                 self.conn.close()
             except AttributeError as error:
-                ERROR.logger.error("数据库连接失败，失败原因 %s", error)
+                logger.error("数据库连接失败，失败原因 %s", error)
 
         def query(self, sql, state="all"):
             """
@@ -68,7 +68,7 @@ class MysqlDB:
                     data = self.cur.fetchone()
                 return data
             except AttributeError as error_data:
-                ERROR.logger.error("数据库连接失败，失败原因 %s", error_data)
+                logger.error("数据库连接失败，失败原因 %s", error_data)
                 raise
 
         def execute(self, sql: Text):
@@ -84,7 +84,7 @@ class MysqlDB:
                 self.conn.commit()
                 return rows
             except AttributeError as error:
-                ERROR.logger.error("数据库连接失败，失败原因 %s", error)
+                logger.error("数据库连接失败，失败原因 %s", error)
                 # 如果事务异常，则回滚数据
                 self.conn.rollback()
                 raise
@@ -165,7 +165,7 @@ class AssertExecution(MysqlDB):
                 raise ValueTypeError("sql数据类型不正确，接受的是list")
             return data
         except Exception as error_data:
-            ERROR.logger.error("数据库连接失败，失败原因 %s", error_data)
+            logger.error("数据库连接失败，失败原因 %s", error_data)
             raise error_data
 
 

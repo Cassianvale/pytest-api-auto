@@ -9,7 +9,7 @@
 import ast
 from functools import wraps
 from utils.read_files_tools.regular_control import cache_regular
-from utils.logging_tool.log_control import INFO, ERROR
+from utils.logging_tool.log_control import logger
 
 
 def log_decorator(switch: bool):
@@ -40,10 +40,10 @@ def log_decorator(switch: bool):
                 _is_run = ast.literal_eval(cache_regular(str(res.is_run)))
                 # 判断正常打印的日志，控制台输出绿色
                 if _is_run in (True, None) and res.status_code == 200:
-                    INFO.logger.info(_log_msg)
+                    logger.info(_log_msg)
                 else:
                     # 失败的用例，控制台打印红色
-                    ERROR.logger.error(_log_msg)
+                    logger.error(_log_msg)
             return res
         return swapper
     return decorator
