@@ -96,7 +96,8 @@ class WeChatSend:
                                     >失败用例数：`{self.metrics.failed}个`
                                     >异常用例数：`{self.metrics.broken}个`
                                     >跳过用例数：<font color=\"warning\">{self.metrics.skipped}个</font>
-                                    >用例执行时长：<font color=\"warning\">{self.metrics.time} s</font>
+                                    >allure报告测试时长: <font color=\"warning\">{self.metrics.allure_time} s</font>
+                                    >pytest测试会话时长: <font color=\"warning\">{self.metrics.pytest_time} s</font>
                                     >时间：<font color=\"comment\">{now_time()}</font>
                                     >
                                     >非相关负责人员可忽略此消息。

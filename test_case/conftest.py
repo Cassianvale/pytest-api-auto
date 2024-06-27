@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import ast
 import pytest
-import time
 import allure
 import requests
-import ast
-import os
+import time
+from datetime import datetime
+from utils.cache_process.cache_control import Cache
 from common.setting import ensure_path_sep
+from utils.other_tools.models import TestMetrics
 from utils.requests_tool.request_control import cache_regular
 from utils.logging_tool.log_control import logger
 from utils.other_tools.models import TestCase
@@ -105,6 +107,43 @@ def pytest_collection_modifyitems(config, items):
         logger.info(f"收集到的测试用例:\n{collected_items_str}")
 
 
+def handle_allure_cache(filename):
+    """
+    处理 Allure 数据缓存
+    :param filename: 缓存文件名
+    :return: Allure 数据
+    """
+    cache = Cache(filename)
+    cached_data = cache.get_cache()
+
+    if cached_data:
+        try:
+            # 取出字典中的实际数据
+            allure_data_content = cached_data.get("allure_data")
+            if allure_data_content is not None:
+                # 将数据传递给 TestMetrics 初始化方法
+                allure_data = TestMetrics(**allure_data_content)
+                logger.info("从缓存中读取 allure 数据成功")
+            else:
+                raise KeyError("缓存中未找到关键键 'allure_data'")
+        except (TypeError, KeyError) as e:
+            logger.error(f"从缓存中读取 allure 数据失败: {e}")
+            allure_data = AllureFileClean.get_case_count()
+            cache.set_cache("allure_data", allure_data.__dict__)
+            logger.info("Allure 数据缓存成功")
+    else:
+        logger.error("缓存文件不存在或读取失败，重新获取 allure 数据")
+        allure_data = AllureFileClean.get_case_count()
+        cache.set_cache("allure_data", allure_data.__dict__)
+        logger.info("Allure 数据缓存成功")
+
+    return allure_data
+
+def save_allure_cache(filename, allure_data):
+    cache = Cache(filename)
+    cache.set_cache("allure_data", allure_data.__dict__)
+    
+
 @pytest.fixture(scope="function", autouse=True)
 def case_skip(in_data):
     """处理跳过用例"""
@@ -123,18 +162,27 @@ def case_skip(in_data):
         pytest.skip()
 
 
-def pytest_terminal_summary(config, terminalreporter):
+def pytest_terminal_summary(terminalreporter, exitstatus, config):
     if config.is_master:
+
+        session_start_time = terminalreporter._sessionstarttime
+
+        AllureFileClean.set_session_start_time(session_start_time)
+
+        # 获取 case count
         allure_data = AllureFileClean.get_case_count()
+        
+        # 缓存 allure_data
+        save_allure_cache("allure_data_cache", allure_data)
 
         _PASSED = allure_data.passed
         _BROKEN = allure_data.broken
         _FAILED = allure_data.failed
         _SKIPPED = allure_data.skipped
         _TOTAL = allure_data.total
-        allure_time = allure_data.time
-        pytest_time = round(time.time() - terminalreporter._sessionstarttime, 2)
-
+        allure_time = allure_data.allure_time
+        pytest_time = round(time.time() - session_start_time, 2)
+        
         logger.info(f"总用例数: {_TOTAL}")
         logger.info(f"通过用例数: {_PASSED}")
         logger.error(f"异常用例数: {_BROKEN}")
@@ -147,7 +195,7 @@ def pytest_terminal_summary(config, terminalreporter):
         except ZeroDivisionError:
             logger.info("用例成功率: 0.00 %")
             
-        logger.info(f"allure 报告测试时间: {allure_time} s")
+        logger.info(f"allure 报告测试时长: {allure_time} s")
 
         logger.info(f"pytest 测试会话时长: {pytest_time} s")
 

@@ -132,12 +132,14 @@ class DingTalkSendMsg:
                f"\n\n>Python脚本任务: {config.project_name}" \
                f"\n\n>环境: TEST\n\n>" \
                f"执行人: {config.tester_name}" \
-               f"\n\n>执行结果: {self.metrics.pass_rate}% " \
                f"\n\n>总用例数: {self.metrics.total} " \
                f"\n\n>成功用例数: {self.metrics.passed}" \
                f" \n\n>失败用例数: {self.metrics.failed} " \
                f" \n\n>异常用例数: {self.metrics.broken} " \
                f"\n\n>跳过用例数: {self.metrics.skipped}" \
+               f"\n\n>成 功 率: {self.metrics.pass_rate} % " \
+               f"\n\n>allure报告测试时长: {self.metrics.allure_time}" \
+               f"\n\n>pytest测试会话时长: {self.metrics.pytest_time}" \
                f"\n" \
                f" > ###### 测试报告 [详情](http://{get_host_ip()}:9999/index.html) \n"
         DingTalkSendMsg(AllureFileClean().get_case_count()).send_markdown(

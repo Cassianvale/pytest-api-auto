@@ -18,7 +18,6 @@ from utils import config
 # 关闭警告
 urllib3.disable_warnings()
 
-
 try:
     JSONDecodeError = json.decoder.JSONDecodeError
 except AttributeError:
@@ -36,6 +35,7 @@ def is_not_null_and_blank_str(content):
 
 class FeiShuTalkChatBot:
     """飞书机器人通知"""
+
     def __init__(self, metrics: TestMetrics):
         self.metrics = metrics
 
@@ -54,8 +54,6 @@ class FeiShuTalkChatBot:
 
         logging.debug('text类型：%s', data)
         return self.post()
-
-
 
     def post(self):
         """
@@ -86,7 +84,7 @@ class FeiShuTalkChatBot:
                                 }
                             ],
                             [
-                                    *at_users    #  可以@多个用户
+                                *at_users
                             ],
                             [
                                 {
@@ -111,17 +109,7 @@ class FeiShuTalkChatBot:
                             [
                                 {
                                     "tag": "text",
-                                    "text": "成   功   率 : "
-                                },
-                                {
-                                    "tag": "text",
-                                    "text": f"{self.metrics.pass_rate}%"
-                                }
-                            ],
-                            [
-                                {
-                                "tag": "text",
-                                "text": "总 用 例 数 : "
+                                    "text": "总 用 例 数 : "
                                 },
                                 {
                                     "tag": "text",
@@ -130,28 +118,28 @@ class FeiShuTalkChatBot:
                             ],
                             [
                                 {
-                                "tag": "text",
-                                "text": "成功用例数 : "
+                                    "tag": "text",
+                                    "text": "成功用例数 : "
                                 },
                                 {
                                     "tag": "text",
                                     "text": f"{self.metrics.passed}"
                                 }
-                            ],  
+                            ],
                             [
                                 {
-                                "tag": "text",
-                                "text": "失败用例数 : "
+                                    "tag": "text",
+                                    "text": "失败用例数 : "
                                 },
                                 {
                                     "tag": "text",
                                     "text": f"{self.metrics.failed}"
                                 }
-                            ],  
+                            ],
                             [
                                 {
-                                "tag": "text",
-                                "text": "异常用例数 : "
+                                    "tag": "text",
+                                    "text": "异常用例数 : "
                                 },
                                 {
                                     "tag": "text",
@@ -161,11 +149,41 @@ class FeiShuTalkChatBot:
                             [
                                 {
                                     "tag": "text",
-                                    "text": "执行时长 : "
+                                    "text": "跳过用例数 : "
                                 },
                                 {
                                     "tag": "text",
-                                    "text": f"{self.metrics.time}s"
+                                    "text": f"{self.metrics.skipped}"
+                                }
+                            ],
+                            [
+                                {
+                                    "tag": "text",
+                                    "text": "成   功   率 : "
+                                },
+                                {
+                                    "tag": "text",
+                                    "text": f"{self.metrics.pass_rate} %"
+                                }
+                            ],
+                            [
+                                {
+                                    "tag": "text",
+                                    "text": "allure报告测试时长: "
+                                },
+                                {
+                                    "tag": "text",
+                                    "text": f"{self.metrics.allure_time}s"
+                                }
+                            ],
+                            [
+                                {
+                                    "tag": "text",
+                                    "text": "pytest测试会话时长: "
+                                },
+                                {
+                                    "tag": "text",
+                                    "text": f"{self.metrics.pytest_time}s"
                                 }
                             ],
                             [
@@ -197,10 +215,10 @@ class FeiShuTalkChatBot:
 
         post_data = json.dumps(rich_text)
         response = requests.post(
-                config.lark.webhook,
-                headers=headers,
-                data=post_data,
-                verify=False
+            config.lark.webhook,
+            headers=headers,
+            data=post_data,
+            verify=False
         )
         result = response.json()
 
@@ -210,13 +228,13 @@ class FeiShuTalkChatBot:
             error_data = {
                 "msgtype": "text",
                 "text": {
-                            "content": f"[注意-自动通知]飞书机器人消息发送失败，时间：{time_now}，"
-                                       f"原因：{result_msg}，请及时跟进，谢谢!"
+                    "content": f"[注意-自动通知]飞书机器人消息发送失败，时间：{time_now}，"
+                               f"原因：{result_msg}，请及时跟进，谢谢!"
                 },
                 "at": {
-                            "isAtAll": False
-                        }
-                    }
+                    "isAtAll": False
+                }
+            }
             logging.error("消息发送失败，自动通知：%s", error_data)
             requests.post(config.lark.webhook, headers=headers, data=json.dumps(error_data))
         return result

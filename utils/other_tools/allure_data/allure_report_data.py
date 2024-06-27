@@ -7,6 +7,7 @@
 
 import os
 import json
+import time
 import subprocess
 from typing import List, Text
 from common.setting import ensure_path_sep
@@ -16,7 +17,11 @@ from utils.read_files_tools.get_all_files_path import get_all_files
 
 
 class AllureFileClean:
+
     """allure 报告数据清洗，提取业务需要得数据"""
+
+    session_start_time = 0
+    _cached_case_count = None
 
     @classmethod
     def get_testcases(cls) -> List:
@@ -49,7 +54,6 @@ class AllureFileClean:
                 values += "        " + i[0] + ":" + i[1] + "\n"
         return values
 
-    _cached_case_count = None
 
     @classmethod
     def generate_allure_report(cls) -> None:
@@ -64,6 +68,12 @@ class AllureFileClean:
                 raise RuntimeError("生成Allure报告失败，请检查Allure环境配置")
             else:
                 logger.info("Allure报告生成成功")
+
+
+    @classmethod
+    def set_session_start_time(cls, start_time):
+        cls.session_start_time = start_time
+
 
     @classmethod
     def get_case_count(cls) -> TestMetrics:
@@ -96,16 +106,24 @@ class AllureFileClean:
             # 判断运行用例总数大于0
             if _case_count["total"] > 0:
                 # 确保计算通过率时使用浮点数
-                passed_and_skipped = _case_count["passed"] + _case_count["skipped"]
+                passed = _case_count["passed"]
                 total = _case_count["total"]
-                run_case_data["pass_rate"] = round((passed_and_skipped / total) * 100, 2)
+                run_case_data["pass_rate"] = round((passed / total) * 100, 2)
             else:
                 # 如果未运行用例，则成功率为 0.0
                 run_case_data["pass_rate"] = 0.0
+            # 计算 allure_time
+            run_case_data['allure_time'] = _time if run_case_data['total'] == 0 else round(_time['duration'] / 1000, 2)
 
-            # 收集用例运行时长
-            run_case_data['time'] = _time if run_case_data['total'] == 0 else round(_time['duration'] / 1000, 2)
+            # 计算 pytest_time 并添加到 run_case_data
+            if cls.session_start_time > 0:
+                pytest_time = round(time.time() - cls.session_start_time, 2)
+                run_case_data['pytest_time'] = pytest_time
+            else:
+                run_case_data['pytest_time'] = 0
+            
             cls._cached_case_count = TestMetrics(**run_case_data)
+
             return cls._cached_case_count
 
         except FileNotFoundError as exc:
@@ -122,5 +140,5 @@ class AllureFileClean:
 
 
 if __name__ == '__main__':
-    allure = AllureFileClean().get_case_count()
-    print(allure)
+    allure_data = AllureFileClean.get_case_count(time.time(), time.time())
+    print(allure_data)

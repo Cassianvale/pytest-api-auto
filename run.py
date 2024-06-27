@@ -5,17 +5,18 @@ import os
 import traceback
 import pytest
 from common.setting import ensure_path_sep
+from test_case.conftest import handle_allure_cache
 from utils import config
+from utils.logging_tool.log_control import logger
+from utils.read_files_tools.clean_case import del_directories
 from utils.read_files_tools.case_automatic_control import TestCaseAutomaticGeneration
 from utils.other_tools.models import NotificationType
-from utils.logging_tool.log_control import logger
 from utils.notify.wechat_send import WeChatSend
 from utils.notify.ding_talk import DingTalkSendMsg
 from utils.notify.send_mail import SendEmail
 from utils.notify.lark import FeiShuTalkChatBot
 from utils.other_tools.allure_data.error_case_excel import ErrorCaseExcel
 from utils.other_tools.allure_data.allure_report_data import AllureFileClean
-from utils.read_files_tools.clean_case import del_directories
 
 
 def initialize_logger():
@@ -105,7 +106,8 @@ def run():
         clear_test_case()  # 运行前清空已生成的测试用例
         generate_test_cases()  # 自动生成测试用例
         run_pytest()
-        send_notifications(AllureFileClean().get_case_count())  # 发送通知
+        allure_data = handle_allure_cache("allure_data_cache")  # 处理 allure 数据缓存
+        send_notifications(allure_data)  # 发送通知
         write_error_case_excel()  # 写入异常用例excel
         # serve_allure_report()   # 自动打开 Allure 报告
     except Exception as e:

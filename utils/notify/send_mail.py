@@ -89,7 +89,8 @@ class SendEmail:
             异常用例数: {self.case_count.broken} 个
             跳过用例数: {self.case_count.skipped} 个
             成  功  率: {self.case_count.pass_rate} %
-            运行时长：{self.case_count.time} 秒
+            allure报告测试时长: {self.case_count.allure_time} 秒
+            pytest测试会话时长: {self.case_count.pytest_time} 秒
         {self.allure_data.get_failed_cases_detail()}
 
         **********************************

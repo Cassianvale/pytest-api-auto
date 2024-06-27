@@ -132,10 +132,14 @@ class TestMetrics:
     skipped: int
     total: int
     pass_rate: float
-    time: Text
+    allure_time: float
+    pytest_time: float
 
     def __str__(self):
-        return f"TestMetrics(passed={self.passed}, failed={self.failed}, broken={self.broken}, skipped={self.skipped}, total={self.total}, pass_rate={self.pass_rate}, time={self.time})"
+        return (f"TestMetrics(passed={self.passed}, failed={self.failed}, broken={self.broken}, "
+                f"skipped={self.skipped}, total={self.total}, pass_rate={self.pass_rate}, "
+                f"allure_time={self.allure_time}, pytest_time={self.pytest_time})")
+
 
 # =========================
 # 工具函数
